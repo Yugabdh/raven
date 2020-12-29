@@ -7,7 +7,7 @@
 #
 # Author:      Yugabdh Pashte <yugabdhppashte.com>
 # ------------------------------------------------------------------------------
-from raven.target.initialize import Initialize
+from raven.targets.initialize import Initialize
 
 
 def run():
@@ -15,7 +15,7 @@ def run():
     Function which starts chain.
     """
 
-    target = Initialize("google.yug", True)
+    target = Initialize("google.com", True)
     status, reason = target.get_status()
     print(status, reason)
     print(target.get_ip())
