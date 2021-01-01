@@ -7,7 +7,9 @@
 #
 # Author:      Yugabdh Pashte <yugabdhppashte.com>
 # ------------------------------------------------------------------------------
+
 from raven.targets.initialize import Initialize
+from raven.web.webreq import WebRequest
 
 
 def run():
@@ -15,7 +17,7 @@ def run():
     Function which starts chain.
     """
 
-    target = Initialize("google.com", True)
+    target = Initialize("google.c", True)
     status, reason = target.get_status()
     print(status, reason)
     print(target.get_ip())

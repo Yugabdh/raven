@@ -7,11 +7,12 @@
 #
 # Author:      Yugabdh Pashte <yugabdhppashte.com>
 # ------------------------------------------------------------------------------
+
 import requests
 import random
 import socket
 
-from pathlib import Path
+from raven.web.webreq import WebRequest
 
 
 class Initialize(object):
@@ -23,6 +24,11 @@ class Initialize(object):
         domain(str): domain name
         https(bool): have https or http
         ip(str): Address for host at domain name
+
+    Methods:
+
+        get_status: Returns status of website
+        get_ip: Get IP address for URL
     """
 
     def __init__(self, domain: str, https: bool=True, ip: str=None) -> None:
@@ -34,13 +40,6 @@ class Initialize(object):
             self.url = "https://" + domain
         else:
             self.url = "http://" + domain
-        path = Path(__file__).parent.parent / "data/user_agent.txt"
-
-        try:
-            with path.open() as fp:
-                self.all_user_agents = fp.readlines()
-        except:
-            self.all_user_agents = None
 
     def get_status(self, url: str=None) -> tuple:
         """
@@ -58,31 +57,23 @@ class Initialize(object):
         if url is None:
             url = self.url
 
-        if self.all_user_agents is None:
-            user_agent = "Mozilla/5.0 (X11; U; Linux i686; ru; rv:1.9.1.3)"\
-                         " Gecko/20091020 Ubuntu/9.10 (karmic) Firefox/3.5.3"
-        else:
-            user_agent = random.choice(self.all_user_agents).strip()
-
-        headers = {
-            'User-Agent': user_agent,
-        }
-
         try:
-            response = requests.head(
-                url,
-                timeout=5,
-                allow_redirects=True,
-                headers=headers
-            )
-            status_code = response.status_code
-            reason = response.reason
+            req = WebRequest()
+            response = req.make_request('HEAD', url)
+            if response:
+                status_code = response.status_code
+                reason = response.reason
+            else:
+                raise Exception()
         except requests.exceptions.ConnectionError:
-            status_code = '000'
-            reason = 'ConnectionError'
+            status_code = "000"
+            reason = "Connection Error"
         except requests.exceptions.ReadTimeout:
-            status_code = '001'
-            reason = 'TimeOut'
+            status_code = "001"
+            reason = "TimeOut Error"
+        except Exception as exp:
+            status_code = "002"
+            reason = "Error"
 
         return (str(status_code), reason, )
 
