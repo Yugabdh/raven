@@ -2,7 +2,7 @@
 
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
-# Name:        initailize
+# Name:        instance
 # Purpose:     Intializes target
 #
 # Author:      Yugabdh Pashte <yugabdhppashte.com>
@@ -15,7 +15,7 @@ import socket
 from raven.web.webreq import WebRequest
 
 
-class Initialize(object):
+class Instance(object):
     """
     Intializes target
 

@@ -1,1 +1,3 @@
-requests
+requests==2.25.1
+python-whois==0.7.3
+ipwhois==1.2.0

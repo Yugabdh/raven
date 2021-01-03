@@ -8,8 +8,9 @@
 # Author:      Yugabdh Pashte <yugabdhppashte.com>
 # ------------------------------------------------------------------------------
 
-from raven.targets.initialize import Initialize
+from raven.targets.instance import Instance
 from raven.web.webreq import WebRequest
+from raven.footprinting.passive.whoislookup import Whoislookup
 
 
 def run():
@@ -17,7 +18,10 @@ def run():
     Function which starts chain.
     """
 
-    target = Initialize("google.c", True)
+    target = Instance("google.c", True)
     status, reason = target.get_status()
     print(status, reason)
     print(target.get_ip())
+    whois_obj = Whoislookup()
+    print(whois_obj.whois_query(target.domain))
+    print(whois_obj.ip_whois_query(target.ip))
