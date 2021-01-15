@@ -1,0 +1,27 @@
+{
+    "LO": {
+        "url": "traceroute _IP_ADDRESS_"
+    },
+    "AU": {
+        "url": "https://www.telstra.net/cgi-bin/trace",
+        "post_data": {"destination": "_IP_ADDRESS_"}
+    },
+    "CH": {
+        "url": "http://www.switch.ch/cgi-bin/network/nph-traceroute-ip?destination=_IP_ADDRESS_"
+    },
+    "JP": {
+        "url": "http://lg01.colo01.bbtower.ad.jp/cgi-bin/lg.cgi",
+        "post_data": {"CMD": "traceroute", "ARG": "_IP_ADDRESS_"}
+    },
+    "RU": {
+        "url": "http://lg.eltel.net/cgi-bin/LG.cgi?r=s&q=t&a=_IP_ADDRESS_"
+    },
+    "UK": {
+        "url": "http://lg.cerberus.net.uk/lg",
+        "post_data": {"mode": "trace", "input": "_IP_ADDRESS_"}
+    },
+    "US": {
+        "url": "https://www.net.princeton.edu/cgi-bin/traceroute.pl",
+        "post_data": {"cmd": "Go", "target": "_IP_ADDRESS_"}
+    }
+}

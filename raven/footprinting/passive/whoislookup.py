@@ -8,6 +8,7 @@
 #
 # Author:      Yugabdh Pashte <yugabdhppashte.com>
 # ------------------------------------------------------------------------------
+
 import ipwhois
 import whois
 import json
@@ -69,4 +70,4 @@ class Whoislookup:
             print("Error occured while querying RDAP servers. " + str(e))
             ip_whois_data = {}
 
-        return json.dumps(ip_whois_data, indent = 4)
+        return json.dumps(ip_whois_data, indent=4)
