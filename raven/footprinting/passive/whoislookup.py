@@ -55,10 +55,12 @@ class Whoislookup:
     def ip_whois_query(self, ip: str) -> json:
         """
         ip_whois_query:
+
             ip_whois_query queries RDAP to get details.
             Results are standardized responses unlike whois.
 
         Args:
+
             ip: target IP(str) for query.
         """
 

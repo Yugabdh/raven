@@ -39,6 +39,7 @@ class WebRequest(object):
         """
         Returns user-agent string
         """
+
         if self.all_user_agents is None:
             user_agent = "Mozilla/5.0 (X11; U; Linux i686; ru; rv:1.9.1.3)"\
                          " Gecko/20091020 Ubuntu/9.10 (karmic) Firefox/3.5.3"
@@ -90,14 +91,14 @@ class WebRequest(object):
             )
             response.raise_for_status()
         except HTTPError as http_err:
-            print(f"HTTP error occurred: {http_err}")
+            print(f"[!] HTTP error occurred: {http_err}")
             response = None
         except ConnectionError:
-            print("Connection Error: "
+            print("[!] Connection Error: "
                   "Possible reasons: Bad URL, Connection Blocked")
             response = None
         except Exception as err:
-            print(f"Error occurred: {err}")
+            print(f"[!] Error occurred: {err}")
             response = None
 
         return response
