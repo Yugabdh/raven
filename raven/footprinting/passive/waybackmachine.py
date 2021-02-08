@@ -8,9 +8,11 @@
 # Author:      Yugabdh Pashte <yugabdhppashte.com>
 # -------------------------------------------------------------------------------
 
-import json
-
 from raven.web.webreq import WebRequest
+
+import json
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 class WayBackMachine(object):
