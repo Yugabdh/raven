@@ -15,6 +15,7 @@ from raven.web.webreq import WebRequest
 from raven.footprinting.passive.whoislookup import Whoislookup
 from raven.footprinting.active.traceroute import Traceroute
 from raven.footprinting.passive.waybackmachine import WayBackMachine
+from raven.footprinting.passive.dnsdumpster import DNSDumpsterAPI
 
 
 def run():
@@ -35,6 +36,9 @@ def run():
     hops = traceroute.traceroute()
     print(json.dumps(hops, indent=4))
 
-    wayback_obj = WayBackMachine("example.com")
+    wayback_obj = WayBackMachine(target.domain)
     wayback_data = wayback_obj.get_urls()
     print(json.dumps(wayback_data, indent=4))
+
+    dns_obj = DNSDumpsterAPI(target.domain)
+    print(dns_obj.subdomain())
