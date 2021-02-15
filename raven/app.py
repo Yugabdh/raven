@@ -37,7 +37,7 @@ def run():
     print(json.dumps(hops, indent=4))
 
     wayback_obj = WayBackMachine(target.domain)
-    wayback_data = wayback_obj.get_urls()
+    wayback_data = wayback_obj.get_urls(2021, 2021)
     print(json.dumps(wayback_data, indent=4))
 
     dns_obj = DNSDumpsterAPI(target.domain)

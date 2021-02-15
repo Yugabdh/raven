@@ -8,11 +8,9 @@
 # Author:      Yugabdh Pashte <yugabdhppashte.com>
 # -------------------------------------------------------------------------------
 
-from raven.web.webreq import WebRequest
-
 import json
-import urllib3
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+from raven.web.webreq import WebRequest
 
 
 class WayBackMachine(object):
@@ -34,7 +32,7 @@ class WayBackMachine(object):
     def __init__(self, domain: str) -> None:
         self.domain = domain
 
-    def get_urls(self):
+    def get_urls(self, start_year: int= None, stop_year: int= None):
         """
         Queries 'web.archive.org' with given domain and returns URLs.
         """
@@ -42,10 +40,13 @@ class WayBackMachine(object):
         webarchive_url = "https://web.archive.org/cdx/search/cdx"
         payload = {
             'url': self.domain,
+            'from': start_year,
+            'to': stop_year,
             'output': 'json',
             'matchType': 'prefix',
             'collapse': 'urlkey',
-            'fl': 'original,mimetype,timestamp,endtimestamp,groupcount,uniqcount',
+            'fl': 'original,mimetype,timestamp,'
+                  'endtimestamp,groupcount,uniqcount',
             'ilter': '!statuscode:[45]..',
             'limit': 100000,
             '_': 1547318148315,
@@ -55,8 +56,7 @@ class WayBackMachine(object):
         result = req.make_request(
             method='GET',
             url=webarchive_url,
-            params=payload,
-            verify=False
+            params=payload
         )
 
         if result:
