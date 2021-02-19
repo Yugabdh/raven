@@ -16,6 +16,7 @@ from raven.footprinting.passive.whoislookup import Whoislookup
 from raven.footprinting.active.traceroute import Traceroute
 from raven.footprinting.passive.waybackmachine import WayBackMachine
 from raven.footprinting.passive.dnsdumpster import DNSDumpsterAPI
+from raven.footprinting.passive.reverseiplookup import ReverseIPLookup 
 
 
 def run():
@@ -23,7 +24,7 @@ def run():
     Function which starts chain.
     """
 
-    target = Instance("example.com", True)
+    target = Instance("google.com", True)
     status, reason = target.get_status()
     print(status, reason)
     print(target.get_ip())
@@ -42,3 +43,6 @@ def run():
 
     dns_obj = DNSDumpsterAPI(target.domain)
     print(dns_obj.subdomain())
+
+    reverseip = ReverseIPLookup(ip=target.ip)
+    print(reverseip.query_yougetsignal())
