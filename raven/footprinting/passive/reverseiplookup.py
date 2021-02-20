@@ -24,7 +24,6 @@ class ReverseIPLookup(object):
     Attributes:
 
         ip: IP address
-        domain: Domain name
     """
 
     def __init__(self, ip: str) -> None:

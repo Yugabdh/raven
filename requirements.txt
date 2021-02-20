@@ -2,3 +2,4 @@ requests==2.25.1
 python-whois==0.7.3
 ipwhois==1.2.0
 beautifulsoup4==4.9.3
+google==3.0.0
