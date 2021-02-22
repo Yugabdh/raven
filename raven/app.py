@@ -18,7 +18,7 @@ from raven.footprinting.passive.waybackmachine import WayBackMachine
 from raven.footprinting.passive.dnsdumpster import DNSDumpsterAPI
 from raven.footprinting.passive.reverseiplookup import ReverseIPLookup
 from raven.footprinting.passive.googledork import GoogleDork
-
+from raven.footprinting.passive.geoip import GeoIPLookup
 
 def run():
     """
@@ -50,3 +50,6 @@ def run():
 
     gd = GoogleDork(target.domain)
     print(gd.single_query(""))  # Example for query to finding subdomains
+
+    geo = GeoIPLookup(target.ip)
+    print(geo.hackertarget_api())
