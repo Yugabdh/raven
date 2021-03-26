@@ -30,11 +30,18 @@ class WayBackMachine(object):
     """
 
     def __init__(self, domain: str) -> None:
+        """
+        :param domain: Domain name of target
+        """
+
         self.domain = domain
 
-    def get_urls(self, start_year: int= None, stop_year: int= None):
+    def get_urls(self, start_year: int = None, stop_year: int = None):
         """
         Queries 'web.archive.org' with given domain and returns URLs.
+        :param start_year: Query from this year
+        :param stop_year: Query to this year
+        :return: Result from web.archive.org as JSON object
         """
 
         webarchive_url = "https://web.archive.org/cdx/search/cdx"
@@ -64,6 +71,6 @@ class WayBackMachine(object):
             if len(json_data) == 0:
                 print("[!] No results found")
         else:
-            json_data = json.loads([])
+            json_data = json.loads("")
 
         return json_data

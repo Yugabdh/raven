@@ -11,7 +11,7 @@
 # Copyright:   -
 # Licence:     -
 # -------------------------------------------------------------------------------
-import requests
+
 import json
 
 from raven.web.webreq import WebRequest
@@ -27,10 +27,21 @@ class GeoIPLookup(object):
         ip: Ip address(str) target
     """
     def __init__(self, ip: str) -> None:
+        """
+
+        :param ip: IP address of target
+        """
+
         self.ip = ip
         self.req = WebRequest()
 
     def ipstack_api(self, key: str = None) -> json:
+        """
+        IPSTACK API request
+        :param key: API key
+        :return: Result from API
+        """
+
         url = "http://api.ipstack.com/" + self.ip
         payload = {
             'access_key': key,
@@ -47,6 +58,12 @@ class GeoIPLookup(object):
         return result
 
     def ipinfo_api(self, key: str = None) -> json:
+        """
+        IPINFO API request
+        :param key: API key
+        :return: Result from API
+        """
+
         url = "https://ipinfo.io/" + self.ip + "/json"
         payload = {
             'token': key,
@@ -63,6 +80,11 @@ class GeoIPLookup(object):
         return result
 
     def hackertarget_api(self) -> json:
+        """
+        HACKERTARGET GEOIP API request
+        :return: Result from API
+        """
+
         url = "https://api.hackertarget.com/geoip/"
         payload = {
             'q': self.ip,

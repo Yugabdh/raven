@@ -11,7 +11,6 @@
 import json
 
 from raven.targets.instance import Instance
-from raven.web.webreq import WebRequest
 from raven.footprinting.passive.whoislookup import Whoislookup
 from raven.footprinting.active.traceroute import Traceroute
 from raven.footprinting.passive.waybackmachine import WayBackMachine
@@ -19,13 +18,16 @@ from raven.footprinting.passive.dnsdumpster import DNSDumpsterAPI
 from raven.footprinting.passive.reverseiplookup import ReverseIPLookup
 from raven.footprinting.passive.googledork import GoogleDork
 from raven.footprinting.passive.geoip import GeoIPLookup
+from raven.footprinting.active.robot_sitemap import Robot_sitemap
+from raven.footprinting.active.buildwith import BuildWith
+
 
 def run():
     """
     Function which starts chain.
     """
 
-    target = Instance("example.com", True)
+    target = Instance("wikipedia.org", True)
     status, reason = target.get_status()
     print(status, reason)
     print(target.get_ip())
@@ -53,3 +55,10 @@ def run():
 
     geo = GeoIPLookup(target.ip)
     print(geo.hackertarget_api())
+
+    robot = Robot_sitemap(target.domain, True)
+    robot.robot()
+
+    build_with = BuildWith(target.domain, True)
+    its_build_with = build_with.discover()
+    print(its_build_with)

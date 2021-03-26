@@ -10,7 +10,6 @@
 
 import requests
 import re
-import sys
 import base64
 
 from bs4 import BeautifulSoup
@@ -77,7 +76,7 @@ class DNSDumpsterAPI:
         soup = BeautifulSoup(req.content, 'html.parser')
         tables = soup.findAll('table')
 
-        res = {}
+        res = dict()
         res['domain'] = self.domain
         res['dns_records'] = {}
         res['dns_records']['dns'] = self.retrieve_results(tables[0])
@@ -89,21 +88,19 @@ class DNSDumpsterAPI:
         try:
             tmp_url = f"https://dnsdumpster.com/static/map/{self.domain}.png"
             image_data = base64.b64encode(self.session.get(tmp_url).content)
-        except:
+        except Exception as exp:
             image_data = None
-        finally:
-            res['image_data'] = image_data
+
+        res['image_data'] = image_data
 
         self.result = res
 
     def retrieve_results(self, table) -> list:
         """
         Helper method extract data from tables and return to
-        result to quering function.
-
-        Args:
-
-            table: NavigableString object
+        result to querying function.
+        :param table: Navigable string containing tables
+        :return: Returns list of result
         """
 
         res = []
@@ -134,8 +131,9 @@ class DNSDumpsterAPI:
                     'header': header,
                 }
                 res.append(data)
-            except:
+            except Exception as exp:
                 print("[!] Error while scraping dnsdumster")
+                print(exp)
                 res = []
 
         return res
@@ -144,10 +142,8 @@ class DNSDumpsterAPI:
         """
         Helper method extract txt record data from tables
         and return to result to quering function.
-
-        Args:
-
-            table: NavigableString object
+        :param table: Navigable string containing tables
+        :return: Returns list of result
         """
 
         res = []
@@ -170,6 +166,7 @@ class DNSDumpsterAPI:
     def subdomain(self) -> list:
         """
         Returns list of subdomains found with help of dns records.
+        :return: Returns list of hosts
         """
 
         if self.result:

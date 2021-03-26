@@ -9,7 +9,6 @@
 # ------------------------------------------------------------------------------
 
 import requests
-import random
 import socket
 
 from raven.web.webreq import WebRequest
@@ -31,7 +30,7 @@ class Instance(object):
         get_ip: Get IP address for URL
     """
 
-    def __init__(self, domain: str, https: bool=True, ip: str=None) -> None:
+    def __init__(self, domain: str, https: bool = True, ip: str = None) -> None:
         self.domain = domain
         self.https = https
         self.ip = ip
@@ -41,7 +40,7 @@ class Instance(object):
         else:
             self.url = "http://" + domain
 
-    def get_status(self, url: str=None) -> tuple:
+    def get_status(self, url: str = None) -> tuple:
         """
         Returns status code for url
 
@@ -74,10 +73,11 @@ class Instance(object):
         except Exception as exp:
             status_code = "002"
             reason = "Error"
+            print(exp)
 
-        return (str(status_code), reason, )
+        return str(status_code), reason
 
-    def get_ip(self, domain: str=None) -> str:
+    def get_ip(self, domain: str = None) -> str:
         """
         Returns IP address for domain
 
@@ -97,8 +97,9 @@ class Instance(object):
 
         try:
             ip = socket.gethostbyname(domain)
-        except:
+        except Exception as exp:
             ip = None
+            print(exp)
 
         if domain == self.domain:
             self.ip = ip

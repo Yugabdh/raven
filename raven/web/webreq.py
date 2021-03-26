@@ -32,8 +32,11 @@ class WebRequest(object):
         try:
             with path.open() as fp:
                 self.all_user_agents = fp.readlines()
-        except:
-            self.all_user_agents = None
+
+        except FileNotFoundError:
+            print("[!] user_agent.txt file not found")
+            self.all_user_agents = ["Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+                                    "(KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36"]
 
     def get_user_agent(self) -> str:
         """
@@ -52,26 +55,24 @@ class WebRequest(object):
             self,
             method: str,
             url: str,
-            headers: dict=dict(),
-            params: dict=dict(),
-            data: dict=dict(),
-            allow_redirects: bool=True,
-            verify: bool=True,
-            timeout: int=10
+            headers: dict = dict(),
+            params: dict = dict(),
+            data: dict = dict(),
+            allow_redirects: bool = True,
+            verify: bool = True,
+            timeout: int = 10
             ) -> Response:
         """
         Returns response from get request to target
-
-        Args:
-
-            method(str): GET, POST
-            url(str): URL to make GET request
-            header(dict)(Optional): Custom header to pass while making request
-            params(dict)(Optional): Parameters to pass while making request
-            data(dict)(Optional): Data to send
-            allow_redirects(bool): Allow redirect. Default True.
-            verify(bool)(default: True): Verify if host have SSL
-            timeout(int)(Optional): Request timeout
+        :param method: GET, POST
+        :param url: URL to make GET request
+        :param headers: Custom header to pass while making request
+        :param params: Parameters to pass while making request
+        :param data: Data to send
+        :param allow_redirects: Allow redirect. Default True.
+        :param verify: Verify if host have SSL
+        :param timeout: Request timeout
+        :return:
         """
 
         user_agent = self.get_user_agent()

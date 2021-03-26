@@ -24,11 +24,16 @@ class CMSDiscoveryPassive(object):
     """
 
     def __init__(self, key: str):
+        """
+        :param key: whatcms.org key
+        """
         self.key = key
 
     def query(self, domain: str):
         """
         Queries whatcms.org with given API key and domain
+        :param domain: domain name to query
+        :return: CMS Discovered
         """
 
         url = "https://whatcms.org/APIEndpoint/Detect"

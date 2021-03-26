@@ -25,43 +25,31 @@ class Whoislookup:
     """
 
     def __init__(self) -> None:
-        """
-        init function
-        """
-
         pass
 
     def whois_query(self, domain: str) -> str:
         """
-        whois_query:
-
-            Queries whois server for whois info.
-
-        Args:
-
-            domain(str): target domain name for target.
+        Queries whois server for whois info
+        :param domain: target domain name
+        :return: WHOIS data
         """
 
+        whois_data_text = ""
         try:
             whois_data = whois.whois(domain)
             if whois_data:
                 whois_data_text = whois_data.text
         except Exception as e:
-            print("Error occured while querying whois servers. " + str(e))
-            whois_data_text = ""
+            print("[!] Error occurred while querying whois servers. " + str(e))
 
         return whois_data_text
 
     def ip_whois_query(self, ip: str) -> json:
         """
-        ip_whois_query:
-
-            ip_whois_query queries RDAP to get details.
-            Results are standardized responses unlike whois.
-
-        Args:
-
-            ip: target IP(str) for query.
+        ip_whois_query queries RDAP to get details
+        Results are standardized responses unlike whois
+        :param ip: target IP(str) for query
+        :return: JSON data for IP WHOIS lookup
         """
 
         try:
@@ -69,7 +57,7 @@ class Whoislookup:
             ip_whois_data = res.lookup_rdap(depth=1)
 
         except Exception as e:
-            print("Error occured while querying RDAP servers. " + str(e))
+            print("Error occurred while querying RDAP servers. " + str(e))
             ip_whois_data = {}
 
         return json.dumps(ip_whois_data, indent=4)

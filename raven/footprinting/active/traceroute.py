@@ -23,8 +23,8 @@ class Traceroute(object):
     Multi-source traceroute instance.
     """
 
-    def __init__(self, ip: str, no_geoloc: bool=False,
-                 country: str="US", timeout=120) -> None:
+    def __init__(self, ip: str, no_geoloc: bool = False,
+                 country: str = "US", timeout=120) -> None:
 
         self.ip = ip
         self.country = country
@@ -37,8 +37,8 @@ class Traceroute(object):
             json_file = open(path, "r").read()
             sources = json.loads(json_file.replace("_IP_ADDRESS_", self.ip))
             self.source = sources[country]
-        except:
-            print("Error: Data file not found")
+        except FileNotFoundError:
+            print("[!] sources_traceroute.json file not found")
             self.country = "LO"
             self.source = {"url": "traceroute 139.5.31.64"}
 
@@ -59,7 +59,7 @@ class Traceroute(object):
             status_code, traceroute = self.get_traceroute_output()
 
         if status_code != 0 and status_code != 200:
-            return {"error": status_code}
+            return []
 
         # hop_num, hosts
         hops = self.get_hops(traceroute)
@@ -89,7 +89,7 @@ class Traceroute(object):
             signal.alarm(0)
         except Exception as err:
             print(str(err))
-        return (returncode, stdout.decode('ascii'))
+        return returncode, stdout.decode('ascii')
 
     def get_traceroute_output(self) -> tuple:
         """
@@ -122,7 +122,7 @@ class Traceroute(object):
                 traceroute = match
                 break
 
-        return (status_code, traceroute)
+        return status_code, traceroute
 
     def get_hops(self, traceroute) -> list:
         """
@@ -136,7 +136,6 @@ class Traceroute(object):
 
         for line in lines:
             line = line.strip()
-            hop = {}
             if not line:
                 continue
             try:
@@ -188,14 +187,13 @@ class Traceroute(object):
 
         for hop in hops:
             ip_address = hop['ip_address']
-            if ip_address in self.data:
-                data = self.data[ip_address]
-            else:
+            if ip_address not in self.data:
                 data = self.get_location(ip_address)
                 if "error" in str(data):
                     self.data[ip_address] = {"ip": ip_address}
                 else:
                     self.data[ip_address] = data
+
             geocoded_hops.append(self.data[ip_address])
 
         return geocoded_hops
@@ -210,7 +208,8 @@ class Traceroute(object):
         # print(json_data)
         if status_code == 200 and json_data:
             tmp = json.loads(json_data)
-        return tmp
+            return tmp
+        return {}
 
     def urlopen(self, url, context=None):
         """
@@ -252,7 +251,7 @@ class Traceroute(object):
         except requests.exceptions.InvalidURL:
             pass
 
-        return (status_code, content)
+        return status_code, content
 
     def chunked_read(self, response):
         """

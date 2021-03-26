@@ -10,7 +10,7 @@
 
 try:
     from google import search
-except:
+except ModuleNotFoundError:
     from googlesearch import search
 from pathlib import Path
 import random
@@ -28,24 +28,26 @@ class GoogleDork(object):
     """
 
     def __init__(self, domain: str) -> None:
+        """
+        :param domain: Domain name of target
+        """
+
         self.domain = domain
         path = Path(__file__).parent.parent.parent / "data/user_agent.txt"
         try:
             with path.open() as fp:
                 self.all_user_agents = fp.readlines()
-        except Exception as e:
-            print(e)
+        except FileNotFoundError:
+            print("[!] user_agent.txt file not found")
+            self.all_user_agents = ["Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+                                    "(KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36"]
 
     def single_query(self, dork: str, maxop: int = 30) -> list:
         """
         single_query executes single Google dork
-
-        Args:
-
-            dork: Google dork
-        Returns:
-
-            result: list of urls found using Google dorking
+        :param dork: Google dork
+        :param maxop: maximum query output to return
+        :return: list of urls found using Google dorking
         """
 
         result = list()
@@ -61,10 +63,10 @@ class GoogleDork(object):
             updated_query = " ".join(query.split(" ")[0:32])
             if query.endswith('"'):
                 updated_query = f'{updated_query}"'
+            query = updated_query
 
         sleep_for = random.uniform(16.9, 36.9) + random.random() * 10
         user_agent = random.choice(self.all_user_agents).strip()
-        sleep_for = 5.0
         print(query)
         for url in search(
             query,
@@ -87,18 +89,13 @@ class GoogleDork(object):
     def multi_query(self, query_list: list) -> list:
         """
         multi_query executes multiple Google dorks
-
-        Args:
-
-            query_list: List of Google dorks
-        Returns:
-
-            result: list of urls found using Google dorking
+        :param query_list: List of Google dorks
+        :return: list of urls found using Google dorking
         """
 
         result = list()
         for query in query_list:
-            l = self.single_query(query)
+            current_result = self.single_query(query)
             time.sleep(random.uniform(16.9, 36.9))
-            result.append(l)
+            result.append(current_result)
         return result

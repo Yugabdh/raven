@@ -8,7 +8,6 @@
 # Author:      Yugabdh Pashte <yugabdhppashte.com>
 # -------------------------------------------------------------------------------
 
-import requests
 import json
 
 from raven.web.webreq import WebRequest
@@ -27,6 +26,10 @@ class ReverseIPLookup(object):
     """
 
     def __init__(self, ip: str) -> None:
+        """
+        :param ip: IP address of target
+        """
+
         self.ip = ip
         self.req = WebRequest()
 
