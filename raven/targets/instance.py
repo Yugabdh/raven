@@ -11,7 +11,7 @@
 import requests
 import socket
 
-from raven.web.webreq import WebRequest
+from raven.helper.web.webreq import WebRequest
 
 
 class Instance(object):

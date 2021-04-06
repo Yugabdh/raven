@@ -14,7 +14,7 @@
 
 import json
 
-from raven.web.webreq import WebRequest
+from raven.helper.web.webreq import WebRequest
 
 
 class GeoIPLookup(object):

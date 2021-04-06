@@ -10,7 +10,7 @@
 
 import json
 
-from raven.web.webreq import WebRequest
+from raven.helper.web.webreq import WebRequest
 
 
 class CMSDiscoveryPassive(object):
@@ -27,6 +27,7 @@ class CMSDiscoveryPassive(object):
         """
         :param key: whatcms.org key
         """
+
         self.key = key
 
     def query(self, domain: str):

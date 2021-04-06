@@ -1,0 +1,160 @@
+html body {
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 500;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+}
+.bg-bg {
+    background-color: #22242A;
+}
+
+.sidebar {
+    background: rgb(29,32,36);
+    background: linear-gradient(180deg, rgba(53,59,67,1) 0%, rgba(29,32,36,1) 10%);
+    border-right: 0.1px solid #3d3d3d; 
+}
+.sidebar .nav-item.active {
+  font-weight: 700!important;
+  color: #fff;
+}
+
+.topbar {
+    border-bottom: 0.1px solid #3d3d3d;
+}
+
+.sidebar .nav-item.active i {
+    color: #fff!important;
+}
+
+.topbar {
+    background-color: #242930;
+}
+
+form.custom-form input {
+    width: 100%;
+    height: 48px;
+    border-radius: 2px;
+    background: #353b43;
+    padding-left: 20px;
+    margin-bottom: 30px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #a6a6a6;
+    -webkit-transition: all 0.3s;
+    -webkit-transition: 0.3s;
+    -o-transition: 0.3s;
+    transition: 0.3s;
+    border: 1px solid #353b43;
+}
+form.custom-form input:hover, form.custom-form input:focus {
+    background: #3d3d3d;
+    color: #a6a6a6;
+    outline: none;
+}
+form.custom-form textarea {
+    width: 100%;
+    height: 198px;
+    border-radius: 2px;
+    background: #353b43;
+    padding-left: 20px;
+    padding-top: 15px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #a6a6a6;
+    -webkit-transition: all 0.3s;
+    -webkit-transition: 0.3s;
+    -o-transition: 0.3s;
+    transition: 0.3s;
+    resize: none;
+    margin-bottom: 25px;
+    border: 1px solid #353b43;
+}
+
+form.custom-form textarea:focus, form.custom-form textarea:hover {
+    background: #3d3d3d;
+    color: #a6a6a6;
+    outline: none;
+}
+form.custom-form .btn-custom {
+    border-radius: 2px;
+    box-shadow: none;
+}
+
+form.custom-form .primary-btn {
+    background-color: #4e73df;
+    color: #fff;
+}
+
+form.custom-form .primary-btn:hover, form.custom-form .primary-btn:focus {
+    background-color: #2e59d9;
+    color: #fff;
+    font-weight: 600;
+}
+
+form.custom-form .checkbox-container{
+    display: block;
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    font-weight: 500;
+}
+
+form.custom-form .checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #353b43;
+}
+
+/* On mouse-over, add a grey background color */
+form.custom-form .checkbox-container:hover input ~ .checkmark {
+  background-color: #3d3d3d;
+}
+
+/* When the checkbox is checked, add a blue background */
+form.custom-form .checkbox-container input:checked ~ .checkmark {
+  background-color: #2e59d9;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+form.custom-form .checkbox-container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+form.custom-form .checkbox-container .checkmark:after {
+  left: 8px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}

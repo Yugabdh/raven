@@ -8,7 +8,7 @@
 # Author:      Yugabdh Pashte <yugabdhppashte.com>
 # ------------------------------------------------------------------------------
 
-from raven.web.webreq import WebRequest
+from raven.helper.web.webreq import WebRequest
 
 
 class Robot_sitemap(object):
