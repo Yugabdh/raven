@@ -1,6 +1,7 @@
 html body {
     font-family: 'Nunito Sans', sans-serif;
     font-weight: 500;
+    color: #ccc;
 }
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Poppins', sans-serif;
@@ -9,6 +10,16 @@ h1, h2, h3, h4, h5, h6 {
 .bg-bg {
     background-color: #22242A;
 }
+
+.bg-bg-sec {
+    background-color: #353b43;
+}
+
+.smooth-corner-border {
+    border-radius: 2px;
+    border: 1px solid #353b43;
+}
+
 
 .sidebar {
     background: rgb(29,32,36);
@@ -49,7 +60,7 @@ form.custom-form input {
     border: 1px solid #353b43;
 }
 form.custom-form input:hover, form.custom-form input:focus {
-    background: #3d3d3d;
+    background-color: rgb(29,32,36);
     color: #a6a6a6;
     outline: none;
 }
@@ -73,7 +84,7 @@ form.custom-form textarea {
 }
 
 form.custom-form textarea:focus, form.custom-form textarea:hover {
-    background: #3d3d3d;
+    background-color: rgb(29,32,36);
     color: #a6a6a6;
     outline: none;
 }
@@ -126,7 +137,7 @@ form.custom-form .checkbox-container input {
 
 /* On mouse-over, add a grey background color */
 form.custom-form .checkbox-container:hover input ~ .checkmark {
-  background-color: #3d3d3d;
+  background-color: rgb(29,32,36);
 }
 
 /* When the checkbox is checked, add a blue background */
@@ -157,4 +168,28 @@ form.custom-form .checkbox-container .checkmark:after {
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
+}
+
+.recent-list .recent-list-items {
+    background-color: #353b43;
+    border-radius: 2px;
+    font-weight: 500;
+    color: #a6a6a6;
+    -webkit-transition: all 0.3s;
+    -webkit-transition: 0.3s;
+    -o-transition: 0.3s;
+    transition: 0.3s;
+    border: 1px solid #353b43;
+}
+
+.recent-list .recent-list-items:hover {
+    background-color: rgb(29,32,36);
+}
+
+.details-table {
+    width: 100%;
+}
+
+.details-table tr td:first-child {
+    color: #fff;
 }

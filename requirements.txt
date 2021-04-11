@@ -7,4 +7,5 @@ builtwith
 flask
 Flask-WTF
 wtforms
+sqlalchemy
 flask-sqlalchemy

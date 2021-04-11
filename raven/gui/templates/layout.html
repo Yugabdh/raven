@@ -29,16 +29,18 @@
                 </a>
                 <hr class="sidebar-divider my-0">
                 <ul class="navbar-nav text-light" id="accordionSidebar">
+                    {% if session["instance_id"] %}
+                        <li class="nav-item">
+                            <a class="nav-link {{ 'active' if title == 'Dashboard' else '' }}" href="{{ url_for('dashboard', instance_id=session['instance_id']) }}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span>
+                            </a>
+                        </li>
+                    {% endif %}
                     <li class="nav-item">
-                        <a class="nav-link {{ 'active' if active_page == 'dashboard' else '' }}" href="{{ url_for('dashboard') }}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span>
+                        <a class="nav-link {{ 'active' if title == 'Notification' else '' }}" href="{{ url_for('notification') }}"><i class="fas fa-bell"></i><span>Notification</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ 'active' if active_page == 'notification' else '' }}" href="{{ url_for('notification') }}"><i class="fas fa-bell"></i><span>Notification</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ 'active' if active_page == 'settings' else '' }}" href="{{ url_for('settings') }}"><i class="fas fa-cog"></i><span>Settings</span>
+                        <a class="nav-link {{ 'active' if title == 'Settings' else '' }}" href="{{ url_for('settings') }}"><i class="fas fa-cog"></i><span>Settings</span>
                         </a>
                     </li>
                 </ul>
@@ -50,14 +52,7 @@
                 <nav class="navbar navbar-light navbar-expand shadow mb-4 topbar static-top">
                     <div class="container-fluid">
                         <button class="btn btn-link d-md-none rounded-circle mr-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
-                        <form class="form-inline d-none d-sm-inline-block mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search custom-form">
-                            <div class="input-group">
-                                <input class="form-control border-0 small" type="text" placeholder="Search for ...">
-                                <div class="input-group-append">
-                                    <button class="btn btn-primary py-0" type="button"><i class="fas fa-search"></i></button>
-                                </div>
-                            </div>
-                        </form>
+                        <h4 class="text-white" style="margin-bottom: 0;">{{ title }}</h4>
                         <ul class="navbar-nav flex-nowrap ml-auto">
                             <li class="nav-item dropdown d-sm-none no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-toggle="dropdown" href="#"><i class="fas fa-search"></i></a>
                                 <div class="dropdown-menu dropdown-menu-right p-3 animated--grow-in" aria-labelledby="searchDropdown">

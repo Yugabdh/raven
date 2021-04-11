@@ -1,15 +1,43 @@
 {% extends "layout.html" %}
 {% block content %}
     <div class="row justify-content-center">
-        <div class="col-6" style="border-right: 0.1px solid #3d3d3d;">
-            <div class="row">
-                <div class="col-12 py-2">
-                    <h4 class="text-white">Settings</h4>
-                </div>
+        <div class="col-12 mb-4">
+            <div class="container bg-bg-sec p-3 smooth-corner-border">
+                <h5 class="text-white border-secondary border-bottom pb-3">This device</h5>
+                <table class="details-table" style="width:100%">
+                    <tr>
+                        <td>Hostname</td>
+                        <td>{{ details.host_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Host IP address</td>
+                        <td>{{ details.host_ip }}</td>
+                    </tr>
+                    <tr>
+                        <td>Privilege level</td>
+                        <td>{{ details.user_level }}</td>
+                    </tr>
+                </table>
             </div>
         </div>
-        <div class="col-6">
-            
+        <div class="col-12">
+            <div class="container bg-bg-sec p-3 smooth-corner-border">
+                <h5 class="text-white border-secondary border-bottom pb-3">API keys</h5>
+                <table class="details-table" style="width:100%">
+                    <tr>
+                        <td>Hostname</td>
+                        <td>{{ details.host_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Host IP address</td>
+                        <td>{{ details.host_ip }}</td>
+                    </tr>
+                    <tr>
+                        <td>Privilege level</td>
+                        <td>{{ details.user_level }}</td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
 {% endblock content %}
