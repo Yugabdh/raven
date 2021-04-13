@@ -27,7 +27,7 @@ class WebRequest(object):
     """
 
     def __init__(self) -> None:
-        path = Path(__file__).parent.parent / "data/user_agent.txt"
+        path = Path(__file__).parent.parent.parent / "data/user_agent.txt"
 
         try:
             with path.open() as fp:
@@ -40,7 +40,7 @@ class WebRequest(object):
 
     def get_user_agent(self) -> str:
         """
-        Returns user-agent string
+        :return: user-agent string
         """
 
         if self.all_user_agents is None:
@@ -72,7 +72,7 @@ class WebRequest(object):
         :param allow_redirects: Allow redirect. Default True.
         :param verify: Verify if host have SSL
         :param timeout: Request timeout
-        :return:
+        :return: Response
         """
 
         user_agent = self.get_user_agent()

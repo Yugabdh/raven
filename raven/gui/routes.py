@@ -10,12 +10,15 @@
 
 import socket
 import os
+import json
 
+from pathlib import Path
 from flask import render_template, url_for, redirect, session, flash
 from sqlalchemy.exc import IntegrityError
-from raven.gui.forms import InstanceForm
+from raven.gui.forms import InstanceForm, APIKeyForm
 from raven.gui import app, db
 from raven.gui.models import Instance
+from raven.helper.apikey_handler import get_api_keys, update_keys
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -63,14 +66,17 @@ def notification():
     return render_template('notification.html', title='Notification')
 
 
-def get_device_details():
+def get_details():
     """
     Get device details about network and os
     :return: dictionary with details
     """
 
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     details = dict()
+    keys = get_api_keys()
+    details.update(keys)
+
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     try:
         details["host_name"] = socket.gethostname()
@@ -89,7 +95,17 @@ def get_device_details():
     return details
 
 
-@app.route('/settings')
+@app.route('/settings', methods=['GET', 'POST'])
 def settings():
-    details = get_device_details()
-    return render_template('settings.html', title='Settings', details=details)
+    form = APIKeyForm()
+    details = get_details()
+    if form.validate_on_submit():
+        keys = {
+            "ipstack": form.ipstack.data,
+            "ipinfo": form.ipinfo.data,
+            "whatcms": form.whatcms.data
+        }
+        update_keys(keys)
+        details = get_details()
+        flash("API keys update.")
+    return render_template('settings.html', title='Settings', details=details, form=form)

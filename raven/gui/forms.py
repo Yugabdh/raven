@@ -16,8 +16,14 @@ from wtforms.widgets import TextArea
 
 class InstanceForm(FlaskForm):
     instance_name = StringField('Instance Name', validators=[DataRequired()])
-    domain = StringField('Domain Name',
-                         validators=[DataRequired()])
+    domain = StringField('Domain Name', validators=[DataRequired()])
     note = StringField('Note', widget=TextArea())
     https = BooleanField('HTTPS')
     submit = SubmitField('Create')
+
+
+class APIKeyForm(FlaskForm):
+    ipstack = StringField('ipstack API key')
+    ipinfo = StringField('ipinfo API key')
+    whatcms = StringField('whatcms API key')
+    submit = SubmitField('Update')

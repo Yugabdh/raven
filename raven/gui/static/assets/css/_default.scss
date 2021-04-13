@@ -1,0 +1,138 @@
+html,
+body {
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 300;
+    background-color: $bg_dark;
+    color: $text_other;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+    color: $text_title;
+}
+
+
+h1 {
+    font-size: 70px;
+}
+
+h2 {
+    font-size: 36px;
+}
+
+h3 {
+    font-size: 30px;
+}
+
+h4 {
+    font-size: 24px;
+}
+
+h5 {
+    font-size: 18px;
+}
+
+h6 {
+    font-size: 16px;
+}
+  
+p {
+    font-size: 16px;
+    font-family: "Nunito Sans", sans-serif;
+    font-weight: 400;
+    line-height: 24px;
+    margin: 0 0 15px 0;
+}
+
+img {
+    max-width: 100%;
+}
+
+input, select, textarea, button {
+    &:focus {
+        outline: none;
+    }
+}
+
+a {
+    text-decoration: none;
+    outline: none;
+    &:hover, &:focus {
+        text-decoration: none;
+        outline: none;
+    }
+}
+
+ul,
+ol {
+    padding: 0;
+    margin: 0;
+}
+
+.section-title {
+    h2 {
+        color: $white;
+        font-size: 48px;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+    p {
+        color: $white;
+        margin-bottom: 0;
+    }
+}
+
+@media (max-width: 740px) {
+    .section-title{
+        h2 {
+            font-size: 38px;
+        }
+    } 
+}
+
+.set-bg {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top center;
+}
+
+.spad {
+    padding-top: 100px;
+    padding-bottom: 100px;
+}
+
+.spad-2 {
+    padding-top: 50px;
+    padding-bottom: 70px;
+}
+
+#content {
+    background-color: $bg_dark;
+}
+
+.card {
+    background-color: $bg_dark_secondary;
+    border-color: $bg_dark_secondary;
+    box-shadow: -8px 8px 14px 0 rgb(0 0 0 / 25%);
+
+    .card-header {
+        padding: .75rem 1.25rem;
+        background-color: $bg_dark_secondary;
+        border-bottom: 1px solid #47474866;
+        color: $white;
+    }
+    tr:not(:last-child) {
+        border-bottom: 1px solid #47474866;
+    }
+
+    td {
+        padding: .75rem 1.25rem;
+    }
+}
