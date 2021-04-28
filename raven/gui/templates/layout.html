@@ -40,7 +40,7 @@
                     {% endif %}
 
                     <li class="nav-item">
-                        <a class="nav-link {{ 'active' if title == 'Instances' else '' }}" ><i class="fas fa-folder"></i><span>Instances</span>
+                        <a class="nav-link {{ 'active' if title == 'Instances' else '' }}" href="{{ url_for('instances') }}"><i class="fas fa-folder"></i><span>Instances</span>
                         </a>
                     </li>
 

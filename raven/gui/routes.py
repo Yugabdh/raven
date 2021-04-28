@@ -49,6 +49,10 @@ def home():
 
     return render_template('home.html', form=form, instance_list=instance_list)
 
+@app.route('/instances')
+def instances():
+    instance_list = Instance.query.all()
+    return render_template('instances.html', title='Instances', instance_list=instance_list)
 
 @app.route('/dashboard/<instance_id>', methods=['GET', 'POST'])
 def dashboard(instance_id=None):

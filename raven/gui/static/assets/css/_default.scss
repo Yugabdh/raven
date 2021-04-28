@@ -69,12 +69,14 @@ a {
         outline: none;
     }
 }
+
 a.primary {
     color: $primary;
     &:hover, &:focus {
         color: $purple;
     }
 }
+
 ul,
 ol {
     padding: 0;
@@ -122,7 +124,7 @@ ol {
     background-color: $bg_dark;
 }
 
-.card {
+.card.settings {
     background-color: $bg_dark_secondary;
     border-color: $bg_dark_secondary;
     box-shadow: -8px 8px 14px 0 #0a0a0a;
@@ -139,5 +141,63 @@ ol {
 
     td {
         padding: .75rem 1.25rem;
+    }
+}
+
+.card.instance {
+    background-color: $bg_dark_secondary;
+    border-color: $bg_dark_secondary;
+    box-shadow: -8px 8px 14px 0 #0a0a0a;
+
+    .card-body {
+        padding: .75rem;
+
+        .card-header {
+            padding-left: 0;
+            padding-top: 0;
+            background-color: $bg_dark_secondary;
+            border-bottom: none;
+            color: $white;
+            .text-small {
+                font-size: 0.75rem;
+                margin-bottom: 0;
+            }
+        }
+
+        .card-text {
+            margin-bottom: 0;
+            color: $text_other;
+            &:hover, &:focus {
+                color: $text_other;
+            }
+        }
+
+        a.primary {
+            color: $primary;
+            &:hover, &:focus {
+                color: $purple;
+            }
+        }
+        
+        .primary-btn {
+            background-color: $primary;
+            border: 1px solid $primary;
+            -webkit-transition: all 0.3s;
+            -webkit-transition: 0.3s;
+            -o-transition: 0.3s;
+            transition: 0.3s;
+    
+            &:hover, &:focus {
+                background-color: transparent;
+                color: $primary;
+            }
+        }
+
+        .btn-custom {
+            float: right;
+            border-radius: .35rem;
+            box-shadow: none;
+            color: #fff;
+        }
     }
 }

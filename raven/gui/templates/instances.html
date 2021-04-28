@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="row justify-content-center">
+        {% if instance_list %}
+            {% for instance in instance_list %}
+                <div class="col-12 mb-4">
+                    <a href="{{ url_for('dashboard', instance_id=instance.id) }}">
+                        <div class="container">
+                            <div class="card instance">
+                                <div class="card-body">
+                                    <div class="card-header">
+                                        <h5>{{ instance.name }}</h5>
+                                        <p class="text-small">{{ instance.date_created.strftime("%m/%d/%Y, %H:%M:%S") }}</p>
+                                    </div>
+                                    <p class="card-text">
+                                        {{ instance.notes }}
+                                    </p>
+                                    {% if instance.https %}
+                                        <a  class="primary" href="https://{{ instance.domain }}" target="_blank">{{ instance.domain }}</a>
+                                    {% else %}
+                                        <a  class="primary" href="http://{{ instance.domain }}" target="_blank">{{ instance.domain }}</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        {% endif %}
+            
+        
+    </div>
+{% endblock content %}
