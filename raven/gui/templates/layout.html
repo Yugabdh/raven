@@ -9,12 +9,15 @@
     {% else %}
         <title>Raven</title>
     {% endif %}
+    <link rel="icon" href="{{ url_for('static', filename='assets/img/favicon.ico') }}" sizes="16x16" type="image/x-icon">
+    <link rel="icon" href="{{ url_for('static', filename='assets/img/favicon-16x16.png') }}" sizes="16x16" type="image/png">
+    <link rel="icon" href="{{ url_for('static', filename='assets/img/favicon-32x32.png') }}" sizes="16x16 32x32" type="image/png">
     <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.min.css') }}">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,700;1,400;1,500;1,700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/fonts/fontawesome-all.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/fonts/font-awesome.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='assets/fonts/fontawesome5-overrides.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/style.css') }}">
 </head>
@@ -35,10 +38,17 @@
                             </a>
                         </li>
                     {% endif %}
+
+                    <li class="nav-item">
+                        <a class="nav-link {{ 'active' if title == 'Instances' else '' }}" ><i class="fas fa-folder"></i><span>Instances</span>
+                        </a>
+                    </li>
+
                     <li class="nav-item">
                         <a class="nav-link {{ 'active' if title == 'Notification' else '' }}" href="{{ url_for('notification') }}"><i class="fas fa-bell"></i><span>Notification</span>
                         </a>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link {{ 'active' if title == 'Settings' else '' }}" href="{{ url_for('settings') }}"><i class="fas fa-cog"></i><span>Settings</span>
                         </a>
@@ -100,9 +110,9 @@
             </div>
         </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='assets/js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/chart.min.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/js/bs-init.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
     <script src="{{ url_for('static', filename='assets/js/theme.js') }}"></script>

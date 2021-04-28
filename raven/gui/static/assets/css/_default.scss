@@ -69,7 +69,12 @@ a {
         outline: none;
     }
 }
-
+a.primary {
+    color: $primary;
+    &:hover, &:focus {
+        color: $purple;
+    }
+}
 ul,
 ol {
     padding: 0;
@@ -120,7 +125,7 @@ ol {
 .card {
     background-color: $bg_dark_secondary;
     border-color: $bg_dark_secondary;
-    box-shadow: -8px 8px 14px 0 rgb(0 0 0 / 25%);
+    box-shadow: -8px 8px 14px 0 #0a0a0a;
 
     .card-header {
         padding: .75rem 1.25rem;

@@ -13,7 +13,7 @@
 
 html,
 body {
-  font-family: "Nunito Sans", sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-weight: 300;
   background-color: #101010;
   color: #b2b1b5;
@@ -27,7 +27,7 @@ h5,
 h6 {
   margin: 0;
   font-weight: 500;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   color: #bfbec2;
 }
 
@@ -75,9 +75,18 @@ a {
   text-decoration: none;
   outline: none;
 }
+
 a:hover, a:focus {
   text-decoration: none;
   outline: none;
+}
+
+a.primary {
+  color: #975aff;
+}
+
+a.primary:hover, a.primary:focus {
+  color: #6f42c1;
 }
 
 ul,
@@ -92,6 +101,7 @@ ol {
   font-weight: 600;
   text-transform: uppercase;
 }
+
 .section-title p {
   color: #fff;
   margin-bottom: 0;
@@ -102,6 +112,7 @@ ol {
     font-size: 38px;
   }
 }
+
 .set-bg {
   background-repeat: no-repeat;
   background-size: cover;
@@ -125,34 +136,41 @@ ol {
 .card {
   background-color: #1e1e1e;
   border-color: #1e1e1e;
-  box-shadow: -8px 8px 14px 0 rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: -8px 8px 14px 0 #0a0a0a;
+          box-shadow: -8px 8px 14px 0 #0a0a0a;
 }
+
 .card .card-header {
-  padding: 0.75rem 1.25rem;
+  padding: .75rem 1.25rem;
   background-color: #1e1e1e;
   border-bottom: 1px solid #47474866;
   color: #fff;
 }
+
 .card tr:not(:last-child) {
   border-bottom: 1px solid #47474866;
 }
+
 .card td {
-  padding: 0.75rem 1.25rem;
+  padding: .75rem 1.25rem;
 }
 
 .sidebar {
   background: #1d2024;
   border-right: 1px solid #47474866;
 }
+
 .sidebar .nav-link {
   border-left: 3px solid transparent;
 }
+
 .sidebar .nav-link.active {
   font-weight: 700 !important;
   color: #fff;
   background-color: #e0e0e033;
   border-left: 3px solid #975aff;
 }
+
 .sidebar .nav-link.active i {
   color: #fff;
 }
@@ -160,63 +178,78 @@ ol {
 .topbar {
   background-color: #1e1e1e;
   border-bottom: 1px solid #47474866;
-  box-shadow: -8px 8px 14px 0 rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: -8px 8px 14px 0 #080808;
+          box-shadow: -8px 8px 14px 0 #080808;
 }
 
-form.custom-form input[type=text] {
+form.custom-form input[type="text"] {
   width: 100%;
   height: 48px;
-  border-radius: 0.35rem;
+  border-radius: .35rem;
   padding-left: 20px;
   margin-bottom: 30px;
   font-size: 16px;
   font-weight: 500;
   color: #a6a6a6;
+  -webkit-transition: all 0.3s;
+  -webkit-transition: 0.3s;
   transition: 0.3s;
   border: 1px solid #47474866;
   background-color: transparent;
 }
-form.custom-form input[type=text]:focus, form.custom-form input[type=text]:hover {
+
+form.custom-form input[type="text"]:focus, form.custom-form input[type="text"]:hover {
   color: #a6a6a6;
   border-color: #975aff;
   outline: none;
 }
+
 form.custom-form textarea {
   width: 100%;
   height: 198px;
-  border-radius: 0.35rem;
+  border-radius: .35rem;
   padding-left: 20px;
   padding-top: 15px;
   font-size: 16px;
   font-weight: 500;
   color: #a6a6a6;
+  -webkit-transition: all 0.3s;
+  -webkit-transition: 0.3s;
   transition: 0.3s;
   resize: none;
   margin-bottom: 25px;
   background-color: transparent;
   border: 1px solid #47474866;
 }
+
 form.custom-form textarea:focus, form.custom-form textarea:hover {
   color: #a6a6a6;
   border-color: #975aff;
   outline: none;
 }
+
 form.custom-form .btn-custom {
   width: 100%;
   height: 48px;
-  border-radius: 0.35rem;
-  box-shadow: none;
+  border-radius: .35rem;
+  -webkit-box-shadow: none;
+          box-shadow: none;
   color: #fff;
 }
+
 form.custom-form .primary-btn {
   background-color: #975aff;
   border: 1px solid #975aff;
+  -webkit-transition: all 0.3s;
+  -webkit-transition: 0.3s;
   transition: 0.3s;
 }
+
 form.custom-form .primary-btn:hover, form.custom-form .primary-btn:focus {
   background-color: transparent;
   color: #975aff;
 }
+
 form.custom-form .checkbox-container {
   display: block;
   position: relative;
@@ -229,6 +262,7 @@ form.custom-form .checkbox-container {
   user-select: none;
   font-weight: 500;
 }
+
 form.custom-form .checkbox-container input {
   position: absolute;
   opacity: 0;
@@ -236,13 +270,16 @@ form.custom-form .checkbox-container input {
   height: 0;
   width: 0;
 }
+
 form.custom-form .checkbox-container:hover input ~ .checkmark {
   /* On mouse-over, add a grey background color */
   border-color: #975aff;
 }
+
 form.custom-form .checkbox-container :checked ~ .checkmark {
   border-color: #975aff;
 }
+
 form.custom-form .checkmark {
   /* Create a custom checkbox */
   position: absolute;
@@ -253,6 +290,7 @@ form.custom-form .checkmark {
   background-color: transparent;
   border: 1px solid #47474866;
 }
+
 form.custom-form .checkmark:after {
   /* Create the checkmark/indicator (hidden when not checked) */
   content: "";
@@ -273,14 +311,18 @@ form.custom-form .checkbox-container .checkmark:after {
   height: 10px;
   border: solid #975aff;
   border-width: 0 1px 1px 0;
+  -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
 }
 
 .recent-items {
   background-color: #1e1e1e;
   border-radius: 0.3rem;
-  box-shadow: -8px 8px 14px 0 rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: -8px 8px 14px 0 #0a0a0a;
+          box-shadow: -8px 8px 14px 0 #0a0a0a;
 }
+
 .recent-items .date-time {
   float: right;
-}/*# sourceMappingURL=style.css.map */
+}
+/*# sourceMappingURL=style.css.map */

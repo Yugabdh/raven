@@ -51,21 +51,26 @@
                 <div class="col-lg-12">
                     <div class="row">
                         {% if instance_list %}
-                            {% for instance in instance_list %}
+                            {% for instance in instance_list[:3] %}
                                 <div class="col-12 my-3">
                                     <a href="{{ url_for('dashboard', instance_id=instance.id) }}">
                                         <div class="container p-3 recent-items">
                                             <h6>{{ instance.name }}</h6>
                                             {% if instance.https %}
-                                                <a href="https://{{ instance.domain }}" target="_blank">{{ instance.domain }}</a>
+                                                <a  class="primary" href="https://{{ instance.domain }}" target="_blank">{{ instance.domain }}</a>
                                             {% else %}
-                                                <a href="http://{{ instance.domain }}" target="_blank">{{ instance.domain }}</a>
+                                                <a  class="primary" href="http://{{ instance.domain }}" target="_blank">{{ instance.domain }}</a>
                                             {% endif %}
                                             <span class="date-time">{{ instance.date_created.strftime("%m/%d/%Y, %H:%M:%S") }}</span>
                                         </div>
                                     </a>
                                 </div>
                             {% endfor %}
+                            {% if instance_list | length > 3 %}
+                            <div class="col-12">
+                                <a href="#" class="primary">More...</a>
+                            </div>
+                            {% endif %}
                         {% else %}
                                 <div class="col-12">
                                     <div class="container p-3 recent-items">
