@@ -1,0 +1,17 @@
+.card-icon {
+    background-color: #1e1e1e;
+    border: 1px solid #474748;
+    .card-body {
+        border-top: 1px solid #474748;
+        padding: .75rem;
+        .text-description {
+            font-size: 0.75rem;
+            line-height: normal;
+            color: #bfbec2;
+        }
+    }
+    &:hover, &:focus {
+        border: 1px solid #7b7b7e;
+        box-shadow: -8px 8px 14px 0 #0a0a0a;
+    }
+}

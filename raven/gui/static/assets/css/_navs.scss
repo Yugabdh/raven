@@ -22,4 +22,30 @@
     background-color: $bg_dark_secondary;
     border-bottom: 1px solid #47474866;
     box-shadow: -8px 8px 14px 0 #080808;
+    
+}
+
+.dropdown {
+    .dropdown-list {
+        .dropdown-header {
+            background: $primary;
+            border: 1px solid #975aff66;
+        }
+
+        .dropdown-item {
+            background: rgb(29,32,36);
+            border-left: 1px solid #474748;
+            border-right: 1px solid #474748;
+            border-bottom: 1px solid #474748;
+            color: #ffffffcc;
+            
+            &:hover, &:focus {
+                color: #ffffff;
+            }
+
+            &:active {
+                background: rgb(19, 21, 24);
+            }
+        }
+    }
 }

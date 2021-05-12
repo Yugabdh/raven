@@ -9,7 +9,7 @@
 # ------------------------------------------------------------------------------
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, BooleanField
+from wtforms import StringField, SubmitField, BooleanField, IntegerField
 from wtforms.validators import DataRequired
 from wtforms.widgets import TextArea
 
@@ -27,3 +27,41 @@ class APIKeyForm(FlaskForm):
     ipinfo = StringField('ipinfo API key')
     whatcms = StringField('whatcms API key')
     submit = SubmitField('Update')
+
+
+class CMSForm(FlaskForm):
+    domain = StringField('Domain Name', validators=[DataRequired()])
+    submit = SubmitField('Discover')
+
+
+class DNSDumpsterForm(FlaskForm):
+    domain = StringField('Domain Name', validators=[DataRequired()])
+    submit = SubmitField('Dive')
+
+
+class GeoIPLookupForm(FlaskForm):
+    ip = StringField('IP address', validators=[DataRequired()])
+    submit = SubmitField('Locate')
+
+
+class GoogleDorkForm(FlaskForm):
+    dork = StringField('Dork string', validators=[DataRequired()])
+    submit = SubmitField('Fire')
+
+
+class ReverseIPLookupForm(FlaskForm):
+    ip = StringField('IP address', validators=[DataRequired()])
+    submit = SubmitField('Lookup')
+
+
+class WayBackMachineForm(FlaskForm):
+    domain = StringField('Domain Name', validators=[DataRequired()])
+    start_year = IntegerField('Results Starting From Year', validators=[DataRequired()])
+    end_year = IntegerField('Results ending From Year')
+    submit = SubmitField('Time Travel')
+
+
+class WhoislookupForm(FlaskForm):
+    domain = StringField('Domain Name', validators=[DataRequired()])
+    ip = StringField('IP address', validators=[DataRequired()])
+    submit = SubmitField('Lookup')

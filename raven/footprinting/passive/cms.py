@@ -37,7 +37,7 @@ class CMSDiscoveryPassive(object):
         :return: CMS Discovered
         """
 
-        url = "https://whatcms.org/APIEndpoint/Detect"
+        url = "https://whatcms.org/API/Tech"
         payload = {
             "url": domain,
             "key": self.key
@@ -52,16 +52,23 @@ class CMSDiscoveryPassive(object):
         )
         json_data = json.loads(result.text)
 
-        if len(json_data) == 0 or len(json_data["result"]) == 0:
-            print("[!] No results found")
+        if json_data["result"]["code"] == 101 or json_data["result"]["code"] == 100 or json_data["result"]["code"] == 113:
+            cms["msg"] = json_data["result"]["msg"]
+            cms["code"] = json_data["result"]["code"]
+            print("[!] Failed: API key error")
 
         elif json_data["result"]["code"] == 201:
+            cms["msg"] = json_data["result"]["msg"]
+            cms["code"] = json_data["result"]["code"]
+            print("[!] Failed: CMS or Host Not Found")
+
+        elif len(json_data["results"]) == 0:
+            cms["msg"] = "[!] Failed: CMS or Host Not Found"
+            cms["code"] = json_data["result"]["code"]
             print("[!] Failed: CMS or Host Not Found")
 
         else:
-            cms = {
-                "name": json_data["result"]["name"],
-                "confidence": json_data["result"]["confidence"],
-                "version": json_data["result"]["version"]
-            }
+            cms["code"] = json_data["result"]["code"]
+            cms["msg"] = json_data["result"]["msg"]
+            cms["data"] = json_data["results"]
         return cms

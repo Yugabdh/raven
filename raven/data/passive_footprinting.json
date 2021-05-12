@@ -1,0 +1,67 @@
+{
+    "passive": {
+        "cms": {
+            "name": "CMS Lookup",
+            "img": "cms.svg",
+            "discription": "A Content Management System, or CMS, is a piece of software designed to help users create and edit a website. It's important to note, however, CMS do much more than help manage the text and image content displayed on webpages. They have evolved to help design the look of websites, track user sessions, handle searches, collect visitor comments, host forums and much much more. Hence knowing what CMS is being used and version of it will give us early hints to know where to dig in to find treasures.",
+            "description-small": "Checks what CMS website is using.",
+            "param": ["Domain name"],
+            "output": "Details on website's CMS",
+            "a": "cms"
+        },
+        "dnsdumpster": {
+            "name": "DNSDumpster API",
+            "img": "dnsdumpster.svg",
+            "discription": "DNSdumpster.com is a FREE domain research tool that can discover hosts related to a domain. Map an organizations attack surface with a virtual dumpster dive of the DNS records associated with the target organization. This is unofficial API created for dnsdumpster.com",
+            "description-small": "DNSdumpster.com unofficial API.",
+            "param": ["Domain name"],
+            "output": "Parsed data from dnsdumpster.com.",
+            "a": "dnsdumpster"
+        },
+        "geoip": {
+            "name": "GEOIP Lookup",
+            "img": "geoip.svg",
+            "discription": "  GeoIP Lookup to get location and other possible details on IP address.",
+            "description-small": "  GeoIP Lookup to get location and other possible details on IP address.",
+            "param": ["IP", "API Key"],
+            "output": "Location of server/ ISP.",
+            "a": "geoip"
+        },
+        "googledork": {
+            "name": "Google Dorking",
+            "img": "googledorking.svg",
+            "discription": "Module to perform google dorking on given query.",
+            "description-small": "Module to perform google dorking on given query.",
+            "param": ["Domain name"],
+            "output": "List of URLs.",
+            "a": "googledork"
+        },
+        "reverseip": {
+            "name": "Reverse IP Lookup",
+            "img": "reverseip.svg",
+            "discription": "Perform a reverse IP lookup to find all A records associated with an IP address. The results can pinpoint virtual hosts being served from a web server. Information gathered can be used to expand the attack surface when identifying vulnerabilities on a server.",
+            "description-small": "to find A record associated with IP.",
+            "param": ["IP address"],
+            "output": "List of A records.",
+            "a": "reverseip"
+        },
+        "wayback": {
+            "name": "WayBackMachine Lookup",
+            "img": "wayback.svg",
+            "discription": "Fetches data from web.archive.org for all website instances at different time. Can be used to find endpoints or passive crawler.",
+            "description-small": "Fetches data from web.archive.org for all website instances at different time. Can be used to find endpoints or passive crawler.",
+            "param": ["Domain name"],
+            "output": "List of URLs available.",
+            "a": "wayback"
+        },
+        "whois": {
+            "name": "WHOIS Lookup",
+            "img": "whois.svg",
+            "discription": "Gather whois information about registered domain by querying whois server.",
+            "description-small": "Gather whois information about registered domain by querying whois server.",
+            "param": ["Domain name"],
+            "output": "Raw data from whois lookup.",
+            "a": "whois"
+        }
+    }
+}

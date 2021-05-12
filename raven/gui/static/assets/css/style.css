@@ -244,6 +244,27 @@ ol {
           box-shadow: -8px 8px 14px 0 #080808;
 }
 
+.dropdown .dropdown-list .dropdown-header {
+  background: #975aff;
+  border: 1px solid #975aff66;
+}
+
+.dropdown .dropdown-list .dropdown-item {
+  background: #1d2024;
+  border-left: 1px solid #474748;
+  border-right: 1px solid #474748;
+  border-bottom: 1px solid #474748;
+  color: #ffffffcc;
+}
+
+.dropdown .dropdown-list .dropdown-item:hover, .dropdown .dropdown-list .dropdown-item:focus {
+  color: #ffffff;
+}
+
+.dropdown .dropdown-list .dropdown-item:active {
+  background: #131518;
+}
+
 form.custom-form input[type="text"] {
   width: 100%;
   height: 48px;
@@ -386,5 +407,27 @@ form.custom-form .checkbox-container .checkmark:after {
 
 .recent-items .date-time {
   float: right;
+}
+
+.card-icon {
+  background-color: #1e1e1e;
+  border: 1px solid #474748;
+}
+
+.card-icon .card-body {
+  border-top: 1px solid #474748;
+  padding: .75rem;
+}
+
+.card-icon .card-body .text-description {
+  font-size: 0.75rem;
+  line-height: normal;
+  color: #bfbec2;
+}
+
+.card-icon:hover, .card-icon:focus {
+  border: 1px solid #7b7b7e;
+  -webkit-box-shadow: -8px 8px 14px 0 #0a0a0a;
+          box-shadow: -8px 8px 14px 0 #0a0a0a;
 }
 /*# sourceMappingURL=style.css.map */

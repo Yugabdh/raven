@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% set active_page = "Footprinting" %}
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-12 mb-4">
+            <div class="container">
+                <div class="card settings">
+                    <div class="card-header">
+                        <h5>Passive Footprinting</h5>
+                    </div>
+                    <div class="card-text">
+                        <div class="container py-3">
+                            <div class="row equal">
+                                {% for key, module in passive_list.items() recursive %}
+                                    <div class="col-sm-3 d-flex pb-3">
+                                        <a class="card card-icon text-center" href="{{ url_for('passive', name=module['a']) }}">
+                                            <img class="card-img-top" src="{{url_for('static', filename='assets/img/footprinting/'+module['img'])}}" alt="Card image cap" style="height:100px;">
+                                            <div class="card-body">
+                                                <h5 class="card-title">{{ module['name'] }}</h5>
+                                                <p class="card-text text-description">{{ module['description-small'] }}</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

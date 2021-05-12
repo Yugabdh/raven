@@ -20,6 +20,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='assets/fonts/font-awesome.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='assets/fonts/fontawesome5-overrides.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/style.css') }}">
+    <script src="{{ url_for('static', filename='assets/js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/allmethods.js') }}"></script>
 </head>
 
 <body id="page-top" class="sidebar-toggled">
@@ -27,7 +29,9 @@
         <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion p-0 toggled">
             <div class="container-fluid d-flex flex-column p-0">
                 <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="{{ url_for('home') }}">
-                    <div class="sidebar-brand-icon"><img src="{{ url_for('static', filename='assets/img/svg/logo.svg')}}" height="40"/></div>
+                    <div class="sidebar-brand-icon">
+                        <img src="{{ url_for('static', filename='assets/img/svg/logo.svg')}}" height="40"/>
+                    </div>
                     <div class="sidebar-brand-text mx-3"><span>Raven</span></div>
                 </a>
                 <hr class="sidebar-divider my-0">
@@ -45,7 +49,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link {{ 'active' if title == 'Notification' else '' }}" href="{{ url_for('notification') }}"><i class="fas fa-bell"></i><span>Notification</span>
+                        <a class="nav-link {{ 'active' if title == 'Footprinting' else '' }}" href="{{ url_for('footprinting') }}"><i class="fas fa-shoe-prints"></i><span>Footprinting</span>
                         </a>
                     </li>
 
@@ -54,7 +58,9 @@
                         </a>
                     </li>
                 </ul>
-                <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
+                <div class="text-center d-none d-md-inline">
+                    <button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button>
+                </div>
             </div>
         </nav>
         <div class="d-flex flex-column" id="content-wrapper">
@@ -62,42 +68,43 @@
                 <nav class="navbar navbar-light navbar-expand shadow mb-4 topbar static-top">
                     <div class="container-fluid">
                         <button class="btn btn-link d-md-none rounded-circle mr-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
-                        <h4 class="text-white" style="margin-bottom: 0;">{{ title }}</h4>
+                        <h4 class="text-white" style="margin-bottom: 0;">{{ active_page }}</h4>
                         <ul class="navbar-nav flex-nowrap ml-auto">
-                            <li class="nav-item dropdown d-sm-none no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-toggle="dropdown" href="#"><i class="fas fa-search"></i></a>
-                                <div class="dropdown-menu dropdown-menu-right p-3 animated--grow-in" aria-labelledby="searchDropdown">
-                                    <form class="form-inline mr-auto navbar-search w-100">
-                                        <div class="input-group"><input class="bg-light form-control border-0 small" type="text" placeholder="Search for ...">
-                                            <div class="input-group-append"><button class="btn btn-primary py-0" type="button"><i class="fas fa-search"></i></button></div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </li>
                             <li class="nav-item dropdown no-arrow mx-1">
-                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-toggle="dropdown" href="#"><span class="badge badge-danger badge-counter">3+</span><i class="fas fa-bell fa-fw"></i></a>
+                                <div class="nav-item dropdown no-arrow">
+                                <a class="dropdown-toggle nav-link" aria-expanded="false" data-toggle="dropdown" href="#">
+                                    <span class="badge badge-danger badge-counter">3+</span><i class="fas fa-bell fa-fw"></i>
+                                </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-list animated--grow-in">
-                                        <h6 class="dropdown-header">alerts center</h6><a class="dropdown-item d-flex align-items-center" href="#">
+                                        <h6 class="dropdown-header">alerts center</h6>
+                                        <a class="dropdown-item d-flex align-items-center" href="#">
                                             <div class="mr-3">
                                                 <div class="bg-primary icon-circle"><i class="fas fa-file-alt text-white"></i></div>
                                             </div>
-                                            <div><span class="small text-gray-500">December 12, 2019</span>
-                                                <p>A new monthly report is ready to download!</p>
+                                            <div>
+                                                <span class="small">December 12, 2021</span>
+                                                <p>normal</p>
                                             </div>
-                                        </a><a class="dropdown-item d-flex align-items-center" href="#">
+                                        </a>
+                                        <a class="dropdown-item d-flex align-items-center" href="#">
                                             <div class="mr-3">
                                                 <div class="bg-success icon-circle"><i class="fas fa-donate text-white"></i></div>
                                             </div>
-                                            <div><span class="small text-gray-500">December 7, 2019</span>
-                                                <p>$290.29 has been deposited into your account!</p>
+                                            <div>
+                                                <span class="small">December 7, 2021</span>
+                                                <p>success</p>
                                             </div>
-                                        </a><a class="dropdown-item d-flex align-items-center" href="#">
+                                        </a>
+                                        <a class="dropdown-item d-flex align-items-center" href="#">
                                             <div class="mr-3">
                                                 <div class="bg-warning icon-circle"><i class="fas fa-exclamation-triangle text-white"></i></div>
                                             </div>
-                                            <div><span class="small text-gray-500">December 2, 2019</span>
-                                                <p>Spending Alert: We've noticed unusually high spending for your account.</p>
+                                            <div>
+                                                <span class="small">December 2, 2021</span>
+                                                <p>warning</p>
                                             </div>
-                                        </a><a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+                                        </a>
+                                        <a class="dropdown-item text-center small text-gray-500" href="{{ url_for('notification') }}">Show All Alerts</a>
                                     </div>
                                 </div>
                             </li>
@@ -110,12 +117,12 @@
             </div>
         </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
     </div>
-    <script src="{{ url_for('static', filename='assets/js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/jquery.easing.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/bootstrap/js/bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/js/chart.min.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/js/bs-init.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
     <script src="{{ url_for('static', filename='assets/js/theme.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/allmethods.js') }}"></script>
 </body>
 
 </html>
