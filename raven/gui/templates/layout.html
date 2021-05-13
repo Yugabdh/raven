@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='assets/fonts/fontawesome5-overrides.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/style.css') }}">
     <script src="{{ url_for('static', filename='assets/js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/jquery.easing.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/js/allmethods.js') }}"></script>
 </head>
 
@@ -117,12 +118,14 @@
             </div>
         </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
     </div>
-    <script src="{{ url_for('static', filename='assets/js/jquery.easing.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/bootstrap/js/bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/js/chart.min.js') }}"></script>
+    <script src="//cdn.amcharts.com/lib/4/core.js"></script>
+    <script src="//cdn.amcharts.com/lib/4/maps.js"></script>
+    <script src="//cdn.amcharts.com/lib/4/geodata/worldLow.js"></script>
+    <script src="{{ url_for('static', filename='assets/js/pallet.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/js/bs-init.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/js/theme.js') }}"></script>
-    <script src="{{ url_for('static', filename='assets/js/allmethods.js') }}"></script>
 </body>
 
 </html>

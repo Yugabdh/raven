@@ -2,7 +2,6 @@ python-whois
 ipwhois
 beautifulsoup4
 google
-googlesearch-python
 builtwith
 flask
 Flask-WTF

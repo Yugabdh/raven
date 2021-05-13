@@ -201,3 +201,15 @@ ol {
         }
     }
 }
+
+.scrollable-output {
+    height: 200px;
+    background-color: transparent;
+    overflow-y: scroll;
+}
+pre {padding: 5px; margin: 5px; }
+.string { color: green !important; }
+.number { color: darkorange !important; }
+.boolean { color: blue !important; }
+.null { color: magenta !important; }
+.key { color: red !important; }

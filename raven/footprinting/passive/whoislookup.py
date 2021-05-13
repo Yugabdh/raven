@@ -60,4 +60,4 @@ class Whoislookup:
             print("Error occurred while querying RDAP servers. " + str(e))
             ip_whois_data = {}
 
-        return json.dumps(ip_whois_data, indent=4)
+        return ip_whois_data

@@ -68,10 +68,15 @@ class ReverseIPLookup(object):
             'key': ''
         }
 
+        headers = {
+            "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+        }
+
         result = self.req.make_request(
             method='POST',
             url=url,
-            data=payload
+            data=payload,
+            headers = headers
         )
         json_op = json.loads(result.text)
         domains = []

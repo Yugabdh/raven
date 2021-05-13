@@ -32,8 +32,11 @@
                                         <label for="domain">Domain Name</label>
                                         <input id="domain" name="domain" placeholder="Domain Name" required="" type="text" value="{{ session["domain"] }}">
                                     </div>
-                                    <div class="col-lg-12">
-                                        <input class="btn primary-btn btn-custom" id="submit" name="submit" type="submit" value="Lookup">
+                                    <div class="col-lg-6">
+                                        <input class="btn primary-btn btn-custom" id="dnsdumpster" name="dnsdumpster" type="button" value="dnsdumpster">
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <input class="btn primary-btn btn-custom" id="google_dork" name="google_dork" type="button" value="Google dork">
                                     </div>
                                 </div>
                             </form>
@@ -42,12 +45,20 @@
 
                     <script type=text/javascript>
                         $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
-                        $("#inputform").submit(function(event) {
-                            event.preventDefault();
-                            $.getJSON($SCRIPT_ROOT + '/_cms', {
+                        $("#dnsdumpster").click(function() {
+                            $.getJSON($SCRIPT_ROOT + '/_subdomain/dnsdumpster', {
                                 domainName: $("#domain").val(),
                             }, function(data) {
-                                cms(data)
+                                subdomain(data, "output", "dnsdumpster")
+                            });
+                            return false;
+                        });
+    
+                        $("#google_dork").click(function() {
+                            $.getJSON($SCRIPT_ROOT + '/_subdomain/google_dork', {
+                                domainName: $("#domain").val(),
+                            }, function(data) {
+                                subdomain(data, "output", "google_dork")
                             });
                             return false;
                         });
@@ -64,9 +75,9 @@
                     </div>
                     <div class="card-text">
                         <div class="container pt-3">
-                            <table class="table table-bordered" id="output">
+                            <div id="output" class="scrollable-output">
+                            </div>
                             <div class="text-center py-3"><img id="loading-image" src="{{ url_for('static', filename='assets/img/ajax-loader.gif')}}" style="display:none;"/></div>
-                            </table>
                         </div>
                     </div>
                   </div>

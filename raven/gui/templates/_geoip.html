@@ -32,8 +32,14 @@
                                         <label for="domain">IP Address</label>
                                         <input id="ip" name="ip" placeholder="IP address" required="" type="text" value="{{ session["ip"] }}">
                                     </div>
-                                    <div class="col-lg-12">
-                                        <input class="btn primary-btn btn-custom" id="submit" name="submit" type="submit" value="Lookup">
+                                    <div class="col-lg-4">
+                                        <input class="btn primary-btn btn-custom" id="Ipstack" name="Ipstack" type="button" value="Ipstack Lookup">
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <input class="btn primary-btn btn-custom" id="Ipinfo" name="Ipinfo" type="submit" value="Ipinfo Lookup">
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <input class="btn primary-btn btn-custom" id="Hackertarget" name="Hackertarget" type="button" value="Hackertarget Lookup">
                                     </div>
                                 </div>
                             </form>
@@ -42,15 +48,34 @@
 
                     <script type=text/javascript>
                         $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
-                        $("#inputform").submit(function(event) {
-                            event.preventDefault();
-                            $.getJSON($SCRIPT_ROOT + '/_geoip', {
+
+                        $("#Ipstack").click(function() {
+                            $.getJSON($SCRIPT_ROOT + '/_geoip/Ipstack', {
                                 ip: $("#ip").val(),
                             }, function(data) {
-                                geoip(data)
+                                geoip(data, "output", "Ipstack")
                             });
                             return false;
                         });
+    
+                        $("#Ipinfo").click(function() {
+                            $.getJSON($SCRIPT_ROOT + '/_geoip/Ipinfo', {
+                                ip: $("#ip").val(),
+                            }, function(data) {
+                                geoip(data, "output", "Ipinfo")
+                            });
+                            return false;
+                        });
+
+                        $("#Hackertarget").click(function() {
+                            $.getJSON($SCRIPT_ROOT + '/_geoip/Hackertarget', {
+                                ip: $("#ip").val(),
+                            }, function(data) {
+                                geoip(data, "output", "Hackertarget")
+                            });
+                            return false;
+                        });
+
                     </script>
                   </div>
 
@@ -64,8 +89,8 @@
                     </div>
                     <div class="card-text">
                         <div class="container pt-3">
-                            <table class="table table-bordered" id="output">
-                            </table>
+                            <div id="output"></div>
+                            <div class="text-center py-3"><img id="loading-image" src="{{ url_for('static', filename='assets/img/ajax-loader.gif')}}" style="display:none;"/></div>
                         </div>
                     </div>
                   </div>

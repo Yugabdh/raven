@@ -107,4 +107,4 @@ class GeoIPLookup(object):
         else:
             print('Outbound Query Exception!')
 
-        return json.dumps(data)
+        return data

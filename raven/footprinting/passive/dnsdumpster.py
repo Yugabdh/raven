@@ -91,7 +91,7 @@ class DNSDumpsterAPI:
         except Exception as exp:
             image_data = None
 
-        res['image_data'] = image_data
+        res['image_url'] = tmp_url
 
         self.result = res
 
@@ -112,7 +112,13 @@ class DNSDumpsterAPI:
                 _ = str(tds[0]).split('<br/>')[0]
                 domain = _.split('>')[1]
                 td_content = tds[0].text.replace('\n', '')
-                header = ' '.join(td_content.split(' ')[1:])
+                # print(tds[0])
+                unwanted = tds[0].find_all("span", class_="glyphicon")
+                wanted = [e for e in tds[0].find_all("span") if e not in unwanted]
+                header = ""
+                for i in wanted:
+                    header += i.text + " "
+                # header = ' '.join(td_content.split(' ')[1:])
                 ip = re.findall(pattern_ip, tds[1].text)[0]
                 reverse_dns = tds[1].find('span', attrs={}).text
 

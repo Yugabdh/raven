@@ -32,8 +32,16 @@
                                         <label for="domain">Domain Name</label>
                                         <input id="domain" name="domain" placeholder="Domain Name" required="" type="text" value="{{ session["domain"] }}">
                                     </div>
+                                    <div class="col-lg-6">
+                                        <label for="startYear">Get results from year</label>
+                                        <input id="startYear" name="startYear" placeholder="Year" required="" type="number" value="">
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <label for="stopYear">Get results to year</label>
+                                        <input id="stopYear" name="stopYear" placeholder="Year" required="" type="number" value="">
+                                    </div>
                                     <div class="col-lg-12">
-                                        <input class="btn primary-btn btn-custom" id="submit" name="submit" type="submit" value="Lookup">
+                                        <input class="btn primary-btn btn-custom" id="submit" name="submit" type="submit" value="Time Travel">
                                     </div>
                                 </div>
                             </form>
@@ -46,8 +54,10 @@
                             event.preventDefault();
                             $.getJSON($SCRIPT_ROOT + '/_wayback', {
                                 domainName: $("#domain").val(),
+                                startYear: $("#startYear").val(),
+                                stopYear: $("#stopYear").val(),
                             }, function(data) {
-                                wayback(data)
+                                wayback(data, "output")
                             });
                             return false;
                         });
@@ -64,8 +74,9 @@
                     </div>
                     <div class="card-text">
                         <div class="container pt-3">
-                            <table class="table table-bordered" id="output">
-                            </table>
+                            <div id="output" class="scrollable-output">
+                            </div>
+                            <div class="text-center py-3"><img id="loading-image" src="{{ url_for('static', filename='assets/img/ajax-loader.gif')}}" style="display:none;"/></div>
                         </div>
                     </div>
                   </div>

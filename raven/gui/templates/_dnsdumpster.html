@@ -47,7 +47,7 @@
                             $.getJSON($SCRIPT_ROOT + '/_dnsdumpster', {
                                 domainName: $("#domain").val(),
                             }, function(data) {
-                                dnsdumpster(data)
+                                dnsdumpster(data, "output")
                             });
                             return false;
                         });
@@ -65,6 +65,8 @@
                     <div class="card-text">
                         <div class="container pt-3">
                             <div id="output"></div>
+                            <div class="text-center py-3"><img id="loading-image" src="{{ url_for('static', filename='assets/img/ajax-loader.gif')}}" style="display:none;"/></div>
+                            
                         </div>
                     </div>
                   </div>

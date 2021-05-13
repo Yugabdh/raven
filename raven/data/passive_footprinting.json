@@ -30,9 +30,9 @@
         "googledork": {
             "name": "Google Dorking",
             "img": "googledorking.svg",
-            "discription": "Module to perform google dorking on given query.",
+            "discription": "It is basically a search string that uses advanced search query to find information that are not easily available on the websites. It is also regarded as illegal google hacking activity which hackers often uses for purposes such as cyber terrorism and cyber theft. Dork is search criteria in which a search engine returns results related to your dork.",
             "description-small": "Module to perform google dorking on given query.",
-            "param": ["Domain name"],
+            "param": ["Domain name", "Google Dork"],
             "output": "List of URLs.",
             "a": "googledork"
         },
@@ -40,10 +40,19 @@
             "name": "Reverse IP Lookup",
             "img": "reverseip.svg",
             "discription": "Perform a reverse IP lookup to find all A records associated with an IP address. The results can pinpoint virtual hosts being served from a web server. Information gathered can be used to expand the attack surface when identifying vulnerabilities on a server.",
-            "description-small": "to find A record associated with IP.",
+            "description-small": "To find A record associated with IP.",
             "param": ["IP address"],
             "output": "List of A records.",
             "a": "reverseip"
+        },
+        "subdomain": {
+            "name": "Subdomain Discovery",
+            "img": "subdomain.svg",
+            "discription": "When coming across a *.target.com scope, it’s always a good idea to seek the road less travelled. Exotic and forgotten applications running on strangely named subdomains will quickly lead to uncovering critical vulnerabilities.",
+            "description-small": "Finds subdomains associated with domain name.",
+            "param": ["Domain name"],
+            "output": "List of subdomains found.",
+            "a": "subdomain"
         },
         "wayback": {
             "name": "WayBackMachine Lookup",
@@ -57,9 +66,9 @@
         "whois": {
             "name": "WHOIS Lookup",
             "img": "whois.svg",
-            "discription": "Gather whois information about registered domain by querying whois server.",
+            "discription": "Gather whois information about registered domain by querying whois server. 'IP whois query' queries RDAP to get details Results are standardized responses unlike whois.",
             "description-small": "Gather whois information about registered domain by querying whois server.",
-            "param": ["Domain name"],
+            "param": ["Domain name", "IP address"],
             "output": "Raw data from whois lookup.",
             "a": "whois"
         }
