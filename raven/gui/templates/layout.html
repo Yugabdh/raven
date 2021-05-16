@@ -58,6 +58,11 @@
                         <a class="nav-link {{ 'active' if title == 'Footprinting' else '' }}" href="{{ url_for('footprinting') }}"><i class="fas fa-shoe-prints"></i><span>Footprinting</span>
                         </a>
                     </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link {{ 'active' if title == 'Enumeration' else '' }}" href="{{ url_for('enumeration') }}"><i class="fas fa-clipboard-list"></i><span>Enumeration</span>
+                        </a>
+                    </li>
 
                     <li class="nav-item">
                         <a class="nav-link {{ 'active' if title == 'Settings' else '' }}" href="{{ url_for('settings') }}"><i class="fas fa-cog"></i><span>Settings</span>

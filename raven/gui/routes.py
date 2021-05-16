@@ -34,6 +34,8 @@ from raven.footprinting.active.traceroute import Traceroute
 from raven.footprinting.active.buildwith import BuildWith
 from raven.footprinting.active.robot_sitemap import Robot_sitemap
 from raven.footprinting.active.sslinfo import SSL
+from raven.footprinting.active.webserver_detect import Webserver_detect
+
 from raven.footprinting.osint.nmap_auto import Nmap_auto
 
 
@@ -380,21 +382,23 @@ def osmapping():
     ip = request.args.get('ip')
     nmap_obj = Nmap_auto()
     result = nmap_obj.osmap(ip)
-
-    if session.get("instance_id"):
-        footprint_save_to_db("Active", "osmapping", f"'IP': '{ip}'", True, json.dumps(result), session["instance_id"])
+    if not 'error' in result.keys():
+        if session.get("instance_id"):
+            footprint_save_to_db("Active", "osmapping", f"'IP': '{ip}'", True, json.dumps(result), session["instance_id"])
     return jsonify(result)
 
 
 @app.route('/_webserver', methods=['GET', 'POST'])
 def webserver():
-    ip = request.args.get('ip')
-    nmap_obj = Nmap_auto()
-    result = nmap_obj.osmap(ip)
+    domain = request.args.get('domainName')
+    https = request.args.get('https')
+    webserver_obj = Webserver_detect(https, domain)
+    result = webserver_obj.detect()
 
     if session.get("instance_id"):
-        footprint_save_to_db("Active", "webserver", f"'IP': '{ip}'", True, json.dumps(result), session["instance_id"])
+        footprint_save_to_db("Active", "webserver", f"'Domain': '{domain}'", False, json.dumps(result), session["instance_id"])
     return jsonify(result)
+
 
 @app.route('/notification')
 def notification():
@@ -428,6 +432,13 @@ def get_details():
         print(e)
 
     return details
+
+
+@app.route('/enumeration', methods=['GET', 'POST'])
+def enumeration():
+    global passive_modules_list
+    global active_modules_list
+    return render_template('enumeration.html', title='Enumeration')
 
 
 @app.route('/settings', methods=['GET', 'POST'])

@@ -451,6 +451,94 @@ function sslinfo(data, tagid) {
 	console.log(data)
 }
 
+function osmapping(data, tagid) {
+	console.log(data)
+	if (data.error) {
+		$("#"+tagid).append('<div> <p class="text-danger">'+data.msg+'</p> </div>')
+	}
+	$table = $('<table class="table table-bordered py-2">');
+	$table.append('<tr><th colspan="2">OS Match</th></tr>');
+	$tr = $('<tr>')
+	$td_graph = $('<td colspan="2">')
+	var os_name = [];
+	var accuracy = [];
+	var ip = Object.keys(data)[0]
+	$.each(data[ip].osmatch, function (key, item) {
+		os_name.push(item.name);
+		accuracy.push(item.accuracy);
+	});
+	var ctx = document.createElement('canvas');
+	var config = {
+		type: 'line',
+		data: {
+			labels: os_name,
+			datasets: [{
+					label: "OS Accuracy",
+					data: accuracy,
+					fill: false,
+					borderColor: "#975aff",
+					tension: 0.1
+				}]
+		},
+		options: {
+			responsive: true,
+			legend: {
+				position: 'bottom',
+			},
+			hover: {
+				mode: 'label'
+			},
+			scales: {
+				xAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'OS Name'
+						}
+					}],
+				yAxes: [{
+						display: true,
+						ticks: {
+							beginAtZero: true,
+							steps: 10,
+							stepValue: 10,
+							max: 100
+						}
+					}]
+			}
+		}
+	};
+	new Chart(ctx, config);
+	$td_graph.append(ctx);
+	$tr.append($td_graph);
+	$table.append($tr)
+	
+	$.each(data[ip].osmatch, function (key, item) {
+		$tr = $('<tr>')
+		$td_os_name = $('<td>')
+		$td_data = $('<td>')
+		$td_os_name.append(item.name)
+		var str = JSON.stringify(item, undefined, 4);
+		$td_data.append('<pre>'+syntaxHighlight(str)+'</pre>')
+		$tr.append($td_os_name)
+		$tr.append($td_data)
+		$table.append($tr)
+	});
+	$("#"+tagid).append($table)
+}
+
+function webserver(data, tagid) {
+	console.log(data)
+
+	$table = $('<table class="table table-bordered py-2" style="table-layout: fixed">');
+	if (data.Server) {
+		$table.append('<tr><td>Server</td><td>'+data.Server+'</td><tr>')
+	}
+	var str = JSON.stringify(data.raw, undefined, 4);
+	$table.append('<tr><td>Raw Header</td><td><pre>'+syntaxHighlight(str)+'</pre></td><tr>')
+	$("#"+tagid).append($table)
+}
+
 $(document).ajaxStart(function() {
     $("img#loading-image").show();
 });
