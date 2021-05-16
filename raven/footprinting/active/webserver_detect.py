@@ -30,6 +30,7 @@ class Webserver_detect(object):
             if 'cloudflare' in r.headers:
                 print("The website is behind Cloudflare.")
             data["raw"] = dict(r.headers)
+            del  data["raw"]["Link"]
             if 'Server' in data["raw"].keys():
                 data['Server'] = r.headers['Server']
             try:

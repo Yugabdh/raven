@@ -1,0 +1,40 @@
+{
+    "enumeration": {
+        "dnsbrute": {
+            "name": "DNS brute",
+            "img": "dnsbrute.svg",
+            "discription": "Discovers subdomains with help of Nmap script.",
+            "description-small": "Discovers subdomains with help of Nmap script.",
+            "param": ["Domain name"],
+            "output": "List of subdomains found.",
+            "a": "dnsbrute"
+        },
+        "pingscan": {
+            "name": "Nmap ping scan",
+            "img": "pingscan.svg",
+            "discription": "Ping scan script by nmap. Can be used for host mapping. This will give results without port scan.",
+            "description-small": "Discovers subdomains with help of Nmap script.",
+            "param": ["Ip address"],
+            "output": "Ping scan result for range of IP addresses.",
+            "a": "pingscan"
+        },
+        "portscan": {
+            "name": "Wellknown port scan",
+            "img": "portscan.svg",
+            "discription": "<p>Now that the network scan has been completed and a list of available hosts has been compiled, a port scan can be used to identify the in use on specific ports by the available hosts.</p> <p>Port scanning will typically classify ports into one of three categories: </p><p><b>Open:</b> The target host responds with a packet indicating it is listening on that port. It also indicates that the service that was used for the scan (typically TCP or UDP) is in use as well.</p><p><b>Closed:</b> The target host received the request packet but responds back with a reply indicating that there is no service listening on that port. </p><p><b>Filtered:</b> A port scan will categorize a port as filtered when a request packet is sent but no reply is received. This typically indicates that the request packet has been filtered out and dropped by a firewall.</p>",
+            "description-small": "Scans well known ports.",
+            "param": ["IP address"],
+            "output": "Outputs well known ports status.",
+            "a": "portscan"
+        },
+        "subnet": {
+            "name": "Subnet scan",
+            "img": "subnet.svg",
+            "discription": "A subnetwork or subnet is a logical subdivision of an IP network. This will give results without port scan.",
+            "description-small": "Scans well known ports.",
+            "param": ["IP address"],
+            "output": "Result of subnet scanning",
+            "a": "subnet"
+        }
+    }
+}

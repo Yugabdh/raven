@@ -43,7 +43,7 @@ class Nmap_auto(object):
             nmap result
         """
         nmap = nmap3.Nmap()
-        results = nmap.nmap_subnet_scan(ip)  # Must be root
+        results = nmap.nmap_subnet_scan(ip, "-sn")  # Must be root
         return results
 
     def topports(self, ip):
@@ -57,4 +57,30 @@ class Nmap_auto(object):
         """
         nmap = nmap3.Nmap()
         results = nmap.scan_top_ports(ip)
+        return results
+    
+    def pingscan(self, ip):
+        """
+        Ping scanning technique
+        Args:
+            ip: IP address of nmap
+
+        Returns:
+            nmap result
+        """
+        nmap = nmap3.NmapScanTechniques()
+        result = nmap.nmap_ping_scan(ip)
+        return result
+ 
+    def dnsbrute(self, domain):
+        """
+        Nmap Dns-brute-script( to get subdomains )
+        Args:
+            domain: domain name
+
+        Returns:
+            nmap result
+        """
+        nmap = nmap3.Nmap()
+        results = nmap.nmap_dns_brute_script(domain)
         return results

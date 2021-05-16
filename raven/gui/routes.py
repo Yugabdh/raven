@@ -53,7 +53,6 @@ def home():
         try:
             db.session.add(instance)
             db.session.commit()
-            print(1)
         except IntegrityError:
             db.session.rollback()
             # error, there already is a Instance with same name
@@ -100,7 +99,6 @@ def dashboard(instance_id=None):
             data["result"] = _.result
             data["instance_id"] = _.instance_id
             footprint_results.append(data)
-        print(footprint_results)
         return render_template('dashboard.html', title='Dashboard', instance=instance, footprint_results=footprint_results)
     else:
         return redirect(url_for('home'))
@@ -119,6 +117,7 @@ def get_list(file_name: str):
 
 passive_modules_list = get_list('passive_footprinting.json')
 active_modules_list = get_list('active_footprinting.json')
+enumeration_modules_list = get_list('enumeration.json')
 
 
 @app.route('/footprinting', methods=['GET', 'POST'])
@@ -436,9 +435,76 @@ def get_details():
 
 @app.route('/enumeration', methods=['GET', 'POST'])
 def enumeration():
-    global passive_modules_list
-    global active_modules_list
-    return render_template('enumeration.html', title='Enumeration')
+    global enumeration_modules_list
+    return render_template('enumeration.html', title='Enumeration', enumeration_list=enumeration_modules_list["enumeration"])
+
+
+@app.route('/enumeration/modules/<name>', methods=['GET', 'POST'])
+def enumeration_modules(name=None):
+    global enumeration_modules_list
+    module_details = enumeration_modules_list["enumeration"][name]
+    details = get_details()
+
+    if session.get("instance_id"):
+        if session["instance_id"]:
+            flash(session["instance_name"] + " is active instance. All the results will be saved to database.")
+
+    if name == "subnet":
+        return render_template('_subnet.html', title='Enumeration', details=module_details)
+
+    elif name == "portscan":
+        return render_template('_portscan.html', title='Enumeration', details=module_details)
+
+    elif name == "dnsbrute":
+        return render_template('_dnsbrute.html', title='Enumeration', details=module_details)
+
+    elif name == "pingscan":
+        return render_template('_pingscan.html', title='Enumeration', details=module_details)
+
+    return render_template('enumeration.html', title='Enumeration', enumeration_list=enumeration_modules_list)
+
+
+@app.route('/_dnsbrute', methods=['GET', 'POST'])
+def dnsbrute():
+    domain = request.args.get('domainName')
+    nmap_obj = Nmap_auto()
+    result = nmap_obj.dnsbrute(domain)
+    if session.get("instance_id"):
+        footprint_save_to_db("Enumeration", "dnsbrute", f"'Domain': '{domain}'", True, json.dumps(result), session["instance_id"])
+    return jsonify(result)
+
+
+@app.route('/_subnet', methods=['GET', 'POST'])
+def subnet():
+    ip = request.args.get('ip')
+    nmap_obj = Nmap_auto()
+    result = nmap_obj.subnet(ip)
+    if not 'error' in result.keys():
+        if session.get("instance_id"):
+            footprint_save_to_db("Enumeration", "subnet", f"'IP': '{ip}'", True, json.dumps(result), session["instance_id"])
+    return jsonify(result)
+
+
+@app.route('/_portscan', methods=['GET', 'POST'])
+def portscan():
+    ip = request.args.get('ip')
+    nmap_obj = Nmap_auto()
+    result = nmap_obj.topports(ip)
+    if not 'error' in result.keys():
+        if session.get("instance_id"):
+            footprint_save_to_db("Enumeration", "portscan", f"'IP': '{ip}'", True, json.dumps(result), session["instance_id"])
+    return jsonify(result)
+
+
+@app.route('/_pingscan', methods=['GET', 'POST'])
+def pingscan():
+    ip = request.args.get('ip')
+    nmap_obj = Nmap_auto()
+    result = nmap_obj.dnsbrute(ip)
+    if not 'error' in result.keys():
+        if session.get("instance_id"):
+            footprint_save_to_db("Enumeration", "pingscan", f"'IP': '{ip}'", True, json.dumps(result), session["instance_id"])
+    return jsonify(result)
 
 
 @app.route('/settings', methods=['GET', 'POST'])

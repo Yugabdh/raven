@@ -50,7 +50,7 @@
             "img": "webserver.svg",
             "discription": "Detect webserver where website is hosted. This is done by inspecting header of response got from target.",
             "description-small": "Detect webserver where website is hosted.",
-            "param": ["IP address"],
+            "param": ["Domain name"],
             "output": "Name of webserver.",
             "a": "webserver"
         }
