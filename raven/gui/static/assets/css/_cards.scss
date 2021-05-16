@@ -15,3 +15,9 @@
         box-shadow: -8px 8px 14px 0 #0a0a0a;
     }
 }
+
+.card-columns {
+    -webkit-column-count: 2;
+      -moz-column-count: 2;
+      column-count: 2;
+  }

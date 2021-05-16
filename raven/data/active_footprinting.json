@@ -1,0 +1,58 @@
+{
+    "active": {
+        "buildwith": {
+            "name": "Buildwith",
+            "img": "buildwith.svg",
+            "discription": "Find what website is buildwith. It is important to find out what technology stack of website is using to map attack accordingly.",
+            "description-small": "Find technology stack of website.",
+            "param": ["Domain name"],
+            "output": "Details on website's technology stack.",
+            "a": "buildwith"
+        },
+        "osmapping": {
+            "name": "OS Mapping",
+            "img": "osmapping.svg",
+            "discription": "Nmap sends a series of TCP and UDP packets to the remote host and examines practically every bit in the responses. After performing dozens of tests such as TCP ISN sampling, TCP options support and ordering, IP ID sampling, and the initial window size check, Nmap compares the results to its nmap-os-db database of more than 2,600 known OS fingerprints and prints out the OS details if there is a match. Each fingerprint includes a freeform textual description of the OS, and a classification which provides the vendor name (e.g. Sun), underlying OS (e.g. Solaris), OS generation (e.g. 10), and device type (general purpose, router, switch, game console, etc). Most fingerprints also have a Common Platform Enumeration (CPE) representation, like cpe:/o:linux:linux_kernel:2.6.",
+            "description-small": "Detects OS of target system.",
+            "param": ["IP address"],
+            "output": "Probability of detected OS",
+            "a": "osmapping"
+        },
+        "robot": {
+            "name": "robots.txt",
+            "img": "robot.svg",
+            "discription": "The robots exclusion standard, also known as the robots exclusion protocol or simply robots.txt, is a standard used by websites to communicate with web crawlers and other web robots. The standard specifies how to inform the web robot about which areas of the website should not be processed or scanned.",
+            "description-small": "Fetches robot.txt and sitemap.xml.",
+            "param": ["Domain name"],
+            "output": "Result from robots.txt and sitemap.xml",
+            "a": "robot"
+        },
+        "sslinfo": {
+            "name": "SSL info",
+            "img": "sslinfo.svg",
+            "discription": "Fetches SSL certificate from website.",
+            "description-small": "Fetches SSL certificate from website.",
+            "param": ["Domain name"],
+            "output": "SSL certificate details.",
+            "a": "sslinfo"
+        },
+        "traceroute": {
+            "name": "Traceroute",
+            "img": "traceroute.svg",
+            "discription": "In computing, traceroute and tracert are computer network diagnostic commands for displaying possible routes (paths) and measuring transit delays of packets across an Internet Protocol (IP) network. The history of the route is recorded as the round-trip times of the packets received from each successive host (remote node) in the route (path); the sum of the mean times in each hop is a measure of the total time spent to establish the connection. Traceroute proceeds unless all (usually three) sent packets are lost more than twice; then the connection is lost and the route cannot be evaluated. Ping, on the other hand, only computes the final round-trip times from the destination point.",
+            "description-small": "Traceroute output.",
+            "param": ["IP address", "Geolocation", "Proxy"],
+            "output": "Traceroute results.",
+            "a": "traceroute"
+        },
+        "webserver": {
+            "name": "Webserver Detection",
+            "img": "webserver.svg",
+            "discription": "Detect webserver where website is hosted. This is done by inspecting header of response got from target.",
+            "description-small": "Detect webserver where website is hosted.",
+            "param": ["IP address"],
+            "output": "Name of webserver.",
+            "a": "webserver"
+        }
+    }
+}

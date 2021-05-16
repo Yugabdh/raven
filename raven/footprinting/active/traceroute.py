@@ -55,6 +55,7 @@ class Traceroute(object):
 
         if self.country == "LO":
             status_code, traceroute = self.execute_cmd(self.source["url"])
+            print(traceroute)
         else:
             status_code, traceroute = self.get_traceroute_output()
 
@@ -89,7 +90,7 @@ class Traceroute(object):
             signal.alarm(0)
         except Exception as err:
             print(str(err))
-        return returncode, stdout.decode('ascii')
+        return returncode, stdout
 
     def get_traceroute_output(self) -> tuple:
         """

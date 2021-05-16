@@ -1,3 +1,4 @@
+requests
 python-whois
 ipwhois
 beautifulsoup4
@@ -8,3 +9,4 @@ Flask-WTF
 wtforms
 sqlalchemy
 flask-sqlalchemy
+python3-nmap

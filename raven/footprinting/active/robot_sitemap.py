@@ -43,7 +43,18 @@ class Robot_sitemap(object):
             method="GET",
             url=url
         )
-        print(result.text)
+        result_data_set = {
+            "Allowed" : [],
+            "Disallowed" : []
+        }
+        data = result.text
+        for line in data.split("\n"):
+            if line.startswith('Allow'):    # this is for allowed url
+                result_data_set["Allowed"].append(line.split(': ')[1].split(' ')[0].split("\r")[0])    # to neglect the comments or other junk info
+            elif line.startswith('Disallow'):    # this is for disallowed url
+                result_data_set["Disallowed"].append(line.split(': ')[1].split(' ')[0].split("\r")[0])    # to neglect the comments or other junk info
+        print(result_data_set)
+        return result_data_set
 
     def sitemap(self):
         """
@@ -56,4 +67,4 @@ class Robot_sitemap(object):
             method="GET",
             url=url
         )
-        print(result.text)
+        return result.text

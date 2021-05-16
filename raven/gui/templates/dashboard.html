@@ -1,6 +1,47 @@
 {% extends "layout.html" %}
 {% set active_page = "Dashboard" %}
 {% block content %}
-    <h5 class="text-white">{{ instance.name }}</h5>
-
+    <div class="row">
+        <div class="col-12 mb-4">
+            <h5 class="text-white">{{ instance.name }}</h5>
+        </div>
+        {% if footprint_results %}
+            <div class="col-12 mb-4">
+                <div class="card-columns">
+                {% for footprint in footprint_results %}
+                    <div class="card settings">
+                        <div class="card-header">
+                            <h5>{{ footprint.type_recon }} > {{ footprint.module_name }}</h5>
+                            <p class="text-small">{{ footprint.scan_time.strftime("%m/%d/%Y, %H:%M:%S") }}</p>
+                            <p class="text-small">Parameters: {{ footprint.params_value }}</p>
+                        </div>
+                        <div class="card-text p-3 {{ 'scrollable-output' if footprint.overflow else '' }}" id="{{ footprint.instance_id }}{{footprint.id}}{{footprint.module_name}}">
+                            <script type="text/javascript">
+                            var result = String("{{footprint.result}}");
+                            result = result.replace(/(\r\n|\n|\r)/gm,"").replace(/&#34;/g, '"');
+                            var json = JSON.parse(result);
+                            var params = String("{"+"{{ footprint.params_value }}"+"}");
+                            params = params.replace(/(\r\n|\n|\r)/gm,"").replace(/&#39;/g, '"');
+                            var params = JSON.parse(params);
+                            console.log(params)
+                            if (params.Method) {
+                                {{footprint.module_name}}(json, "{{ footprint.instance_id }}{{footprint.id}}{{footprint.module_name}}", params.Method)
+                            } else {
+                                {{footprint.module_name}}(json, "{{ footprint.instance_id }}{{footprint.id}}{{footprint.module_name}}")
+                            }
+                            
+                            </script>
+                        </div>
+                    </div>
+                
+                {% endfor %}
+                </div>
+            </div>
+        {% else %}
+            <div class="col-12 mb-4">
+            <p><h6>It's empty here :(</h6></p>
+            <p>Why don't you start With <a href="{{ url_for('footprinting') }}">Footprinting</a>?</p>
+            </div>
+        {% endif %}
+    </div>
 {% endblock content %}

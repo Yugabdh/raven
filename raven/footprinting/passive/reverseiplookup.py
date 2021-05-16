@@ -11,6 +11,7 @@
 import json
 
 from raven.helper.web.webreq import WebRequest
+import requests
 
 
 class ReverseIPLookup(object):
@@ -61,27 +62,32 @@ class ReverseIPLookup(object):
         """
         queries yougetsignal API to get all virtual hosts on server
         """
-
+        print(self.ip)
         url = "https://domains.yougetsignal.com/domains.php"
         payload = {
-            'remoteAddress': self.ip,
-            'key': ''
+            'remoteAddress': self.ip
         }
 
         headers = {
-            "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+            'Host': "domains.yougetsignal.com",
+            "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+            'Connection': "keep-alive",
+            'Cache-Control': "no-cache",
+            'Origin': "http://www.yougetsignal.com",
+            'User-Agent': "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/53.0.2785.143 Chrome/53.0.2785.143 Safari/537.36"
         }
 
-        result = self.req.make_request(
-            method='POST',
-            url=url,
+        result = requests.post(
+            url,
+            headers = headers,
             data=payload,
-            headers = headers
-        )
-        json_op = json.loads(result.text)
+            timeout=7
+        ).content
+        print(result)
+        json_op = json.loads(result)
         domains = []
         if "Success" in json_op['status']:
-            if "0" not in json_op["domainCount"]:
+            if "0" not in json_op['domainCount']:
                 domains = json_op['domainArray']
 
         return domains

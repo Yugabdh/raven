@@ -15,9 +15,9 @@ import json
 from pathlib import Path
 from flask import render_template, url_for, redirect, session, flash, request, jsonify
 from sqlalchemy.exc import IntegrityError
-from raven.gui.forms import InstanceForm, APIKeyForm, CMSForm
+from raven.gui.forms import InstanceForm, APIKeyForm
 from raven.gui import app, db
-from raven.gui.models import Instance
+from raven.gui.models import Instance, Footprint
 from raven.helper.apikey_handler import get_api_keys, update_keys
 
 from raven.targets.instance import Instance as Target
@@ -30,28 +30,35 @@ from raven.footprinting.passive.waybackmachine import WayBackMachine
 from raven.footprinting.passive.whoislookup import Whoislookup
 from raven.footprinting.passive.subdomain import Subdomain
 
+from raven.footprinting.active.traceroute import Traceroute
+from raven.footprinting.active.buildwith import BuildWith
+from raven.footprinting.active.robot_sitemap import Robot_sitemap
+from raven.footprinting.active.sslinfo import SSL
+from raven.footprinting.osint.nmap_auto import Nmap_auto
+
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/home', methods=['GET', 'POST'])
 def home():
     form = InstanceForm()
-    session.clear()
     instance_list = Instance.query.all()
     if form.validate_on_submit():
         if form.https.data:
             https = True
         else:
             https = False
-
         instance = Instance(name=form.instance_name.data, domain=form.domain.data, https=https, notes=form.note.data)
         try:
             db.session.add(instance)
             db.session.commit()
+            print(1)
         except IntegrityError:
             db.session.rollback()
             # error, there already is a Instance with same name
             # constraint failed
             flash("This instance name already exists. Try another instance name.")
+        except Exception as e:
+            print(e)
 
         if instance.id:
             session["instance_name"] = form.instance_name.data
@@ -60,10 +67,13 @@ def home():
 
     return render_template('home.html', form=form, instance_list=instance_list)
 
+
 @app.route('/instances')
 def instances():
+    session.clear()
     instance_list = Instance.query.all()
     return render_template('instances.html', title='Instances', instance_list=instance_list)
+
 
 @app.route('/dashboard/<instance_id>', methods=['GET', 'POST'])
 def dashboard(instance_id=None):
@@ -75,7 +85,21 @@ def dashboard(instance_id=None):
         session["domain"] = target.domain
         session["https"] = target.https
         session["ip"] = target.get_ip()
-        return render_template('dashboard.html', title='Dashboard', instance=instance)
+        footprint = footprinting_get_data(session["instance_id"])
+        footprint_results = list()
+        for _ in footprint:
+            data = dict()
+            data["id"] = _.id
+            data["type_recon"] = _.type_recon
+            data["module_name"] = _.module_name
+            data["params_value"] = _.params_value
+            data["overflow"] = _.overflow
+            data["scan_time"] = _.scan_time
+            data["result"] = _.result
+            data["instance_id"] = _.instance_id
+            footprint_results.append(data)
+        print(footprint_results)
+        return render_template('dashboard.html', title='Dashboard', instance=instance, footprint_results=footprint_results)
     else:
         return redirect(url_for('home'))
 
@@ -92,12 +116,14 @@ def get_list(file_name: str):
 
 
 passive_modules_list = get_list('passive_footprinting.json')
+active_modules_list = get_list('active_footprinting.json')
 
 
 @app.route('/footprinting', methods=['GET', 'POST'])
 def footprinting():
     global passive_modules_list
-    return render_template('footprinting.html', title='Footprinting', passive_list=passive_modules_list['passive'])
+    global active_modules_list
+    return render_template('footprinting.html', title='Footprinting', passive_list=passive_modules_list['passive'], active_list=active_modules_list["active"])
 
 
 @app.route('/footprinting/passive/<name>', methods=['GET', 'POST'])
@@ -143,12 +169,28 @@ def passive(name=None):
     return render_template('footprinting.html')
 
 
+def footprint_save_to_db(type_recon, module_name, params_value, overflow, result, instance_id):
+    footprint = Footprint(type_recon=type_recon, module_name=module_name, params_value=params_value, overflow=overflow, result=result, instance_id=instance_id)
+    try:
+        db.session.add(footprint)
+        db.session.commit()
+    except IntegrityError:
+        db.session.rollback()
+
+
+def footprinting_get_data(instance_id):
+    data = Footprint.query.filter_by(instance_id=instance_id).all()
+    return data
+
+
 @app.route('/_cms', methods=['GET', 'POST'])
 def cms():
     domain = request.args.get('domainName')
     details = get_details()
     cms_obj = CMSDiscoveryPassive(details["whatcms"])
     result = cms_obj.query(domain)
+    if session.get("instance_id"):
+        footprint_save_to_db("Passive", "cms", f"'Domain': '{domain}'", False, json.dumps(result), session["instance_id"])
     return jsonify(result)
 
 
@@ -157,6 +199,8 @@ def dnsdumpster():
     domain = request.args.get('domainName')
     dnsdumpster_obj = DNSDumpsterAPI(domain)    
     result = dnsdumpster_obj.fetch()
+    if session.get("instance_id"):
+        footprint_save_to_db("Passive", "dnsdumpster", f"'Domain': '{domain}'", False, json.dumps(result), session["instance_id"])
     return jsonify(result)
 
 
@@ -172,6 +216,9 @@ def geoip(name=None):
         result = geoip_obj.ipinfo_api(details["ipinfo"])
     elif name == "Hackertarget":
         result = geoip_obj.hackertarget_api()
+
+    if session.get("instance_id"):
+        footprint_save_to_db("Passive", "geoip", f"'IP': '{ip}', 'Method': '{name}'", False, json.dumps(result), session["instance_id"])
     return jsonify(result)
 
 
@@ -181,6 +228,9 @@ def googledork():
     dork = request.args.get('dork')
     google_dork_obj= GoogleDork(domain)
     result = google_dork_obj.single_query(dork)
+
+    if session.get("instance_id"):
+        footprint_save_to_db("Passive", "googledork", f"'Domain': '{domain}', 'Dork': '{dork}'", True, json.dumps(result), session["instance_id"])
     return jsonify(result)
 
 
@@ -192,6 +242,9 @@ def reverseip(name=None):
         result = reverseip_obj.query_yougetsignal()
     elif name == "Hackertarget":
         result = reverseip_obj.query_hackertarget()
+
+    if session.get("instance_id"):
+        footprint_save_to_db("Passive", "reverseip", f"'IP': '{ip}', 'Method': '{name}'", True, json.dumps(result), session["instance_id"])
     return jsonify(result)
 
 
@@ -203,6 +256,9 @@ def subdomain(name=None):
         result = subdomain_obj.google()
     elif name == "dnsdumpster":
         result = subdomain_obj.dnsdumpster()
+
+    if session.get("instance_id"):
+        footprint_save_to_db("Passive", "subdomain", f"'Domain': '{domain}', 'Method': '{name}'", True, json.dumps(result), session["instance_id"])
     return jsonify(result)
 
 
@@ -213,6 +269,9 @@ def wayback():
     stopYear = request.args.get('stopYear')
     wayback_obj = WayBackMachine(domain)
     result = wayback_obj.get_urls(startYear, stopYear)
+
+    if session.get("instance_id"):
+        footprint_save_to_db("Passive", "wayback", f"'Domain': '{domain}'", True, json.dumps(result), session["instance_id"])
     return jsonify(result)
 
 
@@ -227,8 +286,115 @@ def whois(name=None):
     elif name == "ipwhois":
         result = whois_obj.ip_whois_query(ip)
 
+    if session.get("instance_id"):
+        footprint_save_to_db("Passive", "whois", f"'Domain': '{domain}', 'IP': '{ip}', 'Method': '{name}'", True, json.dumps(result), session["instance_id"])
     return jsonify(result)
 
+
+@app.route('/footprinting/active/<name>', methods=['GET', 'POST'])
+def active(name=None):
+    global active_modules_list
+    module_details = active_modules_list["active"][name]
+    details = get_details()
+
+    if session.get("instance_id"):
+        if session["instance_id"]:
+            flash(session["instance_name"] + " is active instance. All the results will be saved to database.")
+
+    if name == "buildwith":
+        return render_template('_buildwith.html', title='Footprinting', details=module_details)
+
+    elif name == "robot":
+        return render_template('_robot.html', title='Footprinting', details=module_details)
+
+    elif name == "sslinfo":
+        return render_template('_sslinfo.html', title='Footprinting', details=module_details)
+
+    elif name == "traceroute":
+        return render_template('_traceroute.html', title='Footprinting', details=module_details)
+
+    elif name == "osmapping":
+        return render_template('_osmapping.html', title='Footprinting', details=module_details)
+
+    elif name == "webserver":
+        return render_template('_webserverdetect.html', title='Footprinting', details=module_details)
+
+    return render_template('footprinting.html')
+
+
+@app.route('/_buildwith', methods=['GET', 'POST'])
+def buildwith():
+    domain = request.args.get('domainName')
+    https = request.args.get('https')
+    buildwith_obj = BuildWith(domain, https)
+    result = buildwith_obj.discover()
+
+    if session.get("instance_id"):
+        footprint_save_to_db("Active", "buildwith", f"'Domain': '{domain}', 'HTTPS': '{https}'", False, json.dumps(result), session["instance_id"])
+    return jsonify(result)
+
+
+@app.route('/_robot/<name>', methods=['GET', 'POST'])
+def robot(name=None):
+    domain = request.args.get('domainName')
+    https = request.args.get('https')
+    robot_obj = Robot_sitemap(domain, https)
+    if name == "robot":
+        result = robot_obj.robot()
+    elif name == "sitemap":
+        result = robot_obj.sitemap()
+
+    if session.get("instance_id"):
+        footprint_save_to_db("Active", "robot", f"'Domain': '{domain}', 'HTTPS': '{https}', 'Method': '{name}'", True, json.dumps(result), session["instance_id"])
+    return jsonify(result)
+
+
+@app.route('/_sslinfo', methods=['GET', 'POST'])
+def sslinfo(name=None):
+    domain = request.args.get('domainName')
+    https = request.args.get('https')
+    ssl_obj = SSL(domain, https)
+    result = ssl_obj.get_ssl()
+
+    if session.get("instance_id"):
+        footprint_save_to_db("Active", "sslinfo", f"'Domain': '{domain}', 'HTTPS': '{https}'", True, json.dumps(result), session["instance_id"])
+    return jsonify(result)
+
+
+@app.route('/_traceroute', methods=['GET', 'POST'])
+def traceroute():
+    ip = request.args.get('ip')
+    https = request.args.get('https')
+    source = request.args.get('source')
+    traceroute_obj = Traceroute(ip, https, source)
+    result = traceroute_obj.traceroute()
+
+
+    if session.get("instance_id"):
+        footprint_save_to_db("Active", "traceroute", f"'IP': '{ip}', 'HTTPS': '{https}'", True, json.dumps(result), session["instance_id"])
+    return jsonify(result)
+
+
+@app.route('/_osmapping', methods=['GET', 'POST'])
+def osmapping():
+    ip = request.args.get('ip')
+    nmap_obj = Nmap_auto()
+    result = nmap_obj.osmap(ip)
+
+    if session.get("instance_id"):
+        footprint_save_to_db("Active", "osmapping", f"'IP': '{ip}'", True, json.dumps(result), session["instance_id"])
+    return jsonify(result)
+
+
+@app.route('/_webserver', methods=['GET', 'POST'])
+def webserver():
+    ip = request.args.get('ip')
+    nmap_obj = Nmap_auto()
+    result = nmap_obj.osmap(ip)
+
+    if session.get("instance_id"):
+        footprint_save_to_db("Active", "webserver", f"'IP': '{ip}'", True, json.dumps(result), session["instance_id"])
+    return jsonify(result)
 
 @app.route('/notification')
 def notification():

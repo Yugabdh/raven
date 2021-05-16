@@ -26,9 +26,12 @@ class Instance(db.Model):
 
 
 class Footprint(db.Model):
+    __tablename__ = 'footprint'
     id = db.Column(db.Integer, primary_key=True)
-    type = db.Column(db.String(20), nullable=False)
-    name = db.Column(db.String(60), nullable=False)
+    type_recon = db.Column(db.String(20), nullable=False)
+    module_name = db.Column(db.String(60), nullable=False)
+    params_value = db.Column(db.String(100), nullable=False)
+    overflow = db.Column(db.Boolean, unique=False, default=True)
     scan_time = db.Column(db.DateTime, nullable=False, default=datetime.now)
     result = db.Column(db.Text, nullable=False)
     instance_id = db.Column(db.Integer, db.ForeignKey('instance.id'), nullable=False)

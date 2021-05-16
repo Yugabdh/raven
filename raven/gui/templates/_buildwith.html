@@ -28,9 +28,15 @@
                         <div class="container">
                             <form method="POST" class="custom-form" id="inputform">
                                 <div class="row py-3">
-                                    <div class="col-lg-12">
-                                        <label for="domain">Domain Name</label>
+                                    <div class="col-lg-10">
                                         <input id="domain" name="domain" placeholder="Domain Name" required="" type="text" value="{{ session["domain"] }}">
+                                    </div>
+                                    <div class="col-lg-2 align-middle pt-0 mt-0">
+                                        <label class="checkbox-container">
+                                            <input class="custom-control-input" id="https" name="https" type="checkbox" value="y">
+                                            HTTPS
+                                            <span class="checkmark"></span>
+                                        </label>
                                     </div>
                                     <div class="col-lg-12">
                                         <input class="btn primary-btn btn-custom" id="submit" name="submit" type="submit" value="Lookup">
@@ -44,10 +50,11 @@
                         $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
                         $("#inputform").submit(function(event) {
                             event.preventDefault();
-                            $.getJSON($SCRIPT_ROOT + '/_cms', {
+                            $.getJSON($SCRIPT_ROOT + '/_buildwith', {
                                 domainName: $("#domain").val(),
+                                https: $('#https').is(':checked'),
                             }, function(data) {
-                                cms(data, "output")
+                                buildwith(data, "output")
                             });
                             return false;
                         });
@@ -64,9 +71,9 @@
                     </div>
                     <div class="card-text">
                         <div class="container pt-3">
-                            <div id="output"></div>
+                            <div id="output">
                             <div class="text-center py-3"><img id="loading-image" src="{{ url_for('static', filename='assets/img/ajax-loader.gif')}}" style="display:none;"/></div>
-                            </table>
+                            </div>
                         </div>
                     </div>
                   </div>

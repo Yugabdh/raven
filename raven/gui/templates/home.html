@@ -38,6 +38,9 @@
                                 {{ form.submit(class="btn primary-btn btn-custom") }}
                             </div>
                         </div>
+                        {% if form.errors %}
+                        {{ form.errors }}
+                        {% endif %}
                     </form>
                 </div>
             </div>

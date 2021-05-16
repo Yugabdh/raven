@@ -1,12 +1,15 @@
-function cms(data) {
+function cms(data, tagid) {
 	console.log(data)
 	if (data.code == 200) {
-		$('#output').append('<tr><th class="text-white">Categories</th> <th class="text-white">Name</th> </tr>')
+		$table = $('<table class="table table-bordered py-2">');
+		$table.append('<tr><th class="text-white">Categories</th> <th class="text-white">Name</th> </tr>');
 		$.each(data.data, function (key, item) {
-			$('#output').append('<tr><td> '+item.categories.join(", ")+ '</td><td> <a href="'+ item.url +'">'+item.name+'</a> </td></tr>');
+			$table.append('<tr><td> '+item.categories.join(", ")+ '</td><td> <a href="'+ item.url +'">'+item.name+'</a> </td></tr>');
 		});
+
+		$("#"+tagid).append($table)
 	} else {
-		$('#output').append('<tr><td colspan="2"> '+data.msg+ '</td></tr>');
+		$("#"+tagid).append('<tr><td colspan="2"> '+data.msg+ '</td></tr>');
 	}
 }
 
@@ -26,31 +29,39 @@ function dnsdumpster(data, tagid) {
 		}
 		$("#"+tagid+" table").append('<tr><td> '+item.domain+ '<br />'+item.header+'</td><td>'+item.ip+'<br />'+item.reverse_dns+'</td><td>'+item.as+'</td></tr>');
 	});
+
 	$("#"+tagid).append('<h5 class="py-3">Host Table(A record)</h5>')
-	$("#"+tagid).append('<table class="table table-bordered"><tr><th class="text-white">Host</th> <th class="text-white">IP</th> <th class="text-white">AS</th></tr></table>')
+	$host_table = $('<table class="table table-bordered py-2">');
+	$host_table.append('<tr><th class="text-white">Host</th> <th class="text-white">IP</th> <th class="text-white">AS</th></tr>')
 	$.each(data.dns_records.host, function (key, item) {
 		if (as[item.as]) {
 			as[item.as] += 1
 		} else {
 			as[item.as] = 1
 		}
-		$("#"+tagid+" table:nth-child(5)").append('<tr><td> '+item.domain+ '<br />'+item.header+'</td><td>'+item.ip+'<br />'+item.reverse_dns+'</td><td>'+item.as+'</td></tr>');
+		$host_table.append('<tr><td> '+item.domain+ '<br />'+item.header+'</td><td>'+item.ip+'<br />'+item.reverse_dns+'</td><td>'+item.as+'</td></tr>');
 	});
+	$("#"+tagid).append($host_table);
+
 	$("#"+tagid).append('<h5 class="py-3">MX record</h5>')
-	$("#"+tagid).append('<table class="table table-bordered"><tr><th class="text-white">Host</th> <th class="text-white">IP</th> <th class="text-white">AS</th></tr></table>')
+	$mx_table = $('<table class="table table-bordered py-2">');
+	$mx_table.append('<tr><th class="text-white">Host</th> <th class="text-white">IP</th> <th class="text-white">AS</th></tr>')
 	$.each(data.dns_records.mx, function (key, item) {
 		if (as[item.as]) {
 			as[item.as] += 1
 		} else {
 			as[item.as] = 1
 		}
-		$("#"+tagid+" table:nth-child(7)").append('<tr><td> '+item.domain+ '<br />'+item.header+'</td><td>'+item.ip+'<br />'+item.reverse_dns+'</td><td>'+item.as+'</td></tr>');
+		$mx_table.append('<tr><td> '+item.domain+ '<br />'+item.header+'</td><td>'+item.ip+'<br />'+item.reverse_dns+'</td><td>'+item.as+'</td></tr>');
 	});
+	$("#"+tagid).append($mx_table);
+
 	$("#"+tagid).append('<h5 class="py-3">TXT record Sender Policy Framework (SPF) configurations</h5>')
-	$("#"+tagid).append('<table class="table table-bordered"></table>')
+	$txt_table = $('<table class="table table-bordered py-2">');
 	$.each(data.dns_records.txt, function (key, item) {
-		$("#"+tagid+" table:nth-child(9)").append('<tr><td> '+item+'</td></tr>');
+		$mx_table.append('<tr><td> '+item+'</td></tr>');
 	});
+	$("#"+tagid).append($txt_table);
 	$("#"+tagid).append('<h5 class="py-3">The map</h5>')
 	$("#"+tagid).append('<a href="'+data.image_url+'" target="_blank"> Click here <3</a>')
 	var values = $.map(as, function(value, key) { return value.toFixed(0) });
@@ -96,11 +107,11 @@ function pointOnmap(divid, latitude, longitude, city) {
 	// Configure series
 	var polygonTemplate = polygonSeries.mapPolygons.template;
 	polygonTemplate.tooltipText = "{name}";
-	polygonTemplate.fill = am4core.color("#74B266");
+	polygonTemplate.fill = am4core.color("#fff");
 
 	// Create hover state and set alternative fill color
 	var hs = polygonTemplate.states.create("hover");
-	hs.properties.fill = am4core.color("#367B25");
+	hs.properties.fill = am4core.color("#1e1e1e");
 
 	// Remove Antarctica
 	polygonSeries.exclude = ["AQ"];
@@ -112,7 +123,7 @@ function pointOnmap(divid, latitude, longitude, city) {
 	var imageSeriesTemplate = imageSeries.mapImages.template;
 	var circle = imageSeriesTemplate.createChild(am4core.Circle);
 	circle.radius = 4;
-	circle.fill = am4core.color("#B27799");
+	circle.fill = am4core.color("#975aff");
 	circle.stroke = am4core.color("#FFFFFF");
 	circle.strokeWidth = 2;
 	circle.nonScaling = true;
@@ -157,37 +168,42 @@ function geoip(data, tagid, name) {
 	if (name === "Ipstack") {
 		$table = $('<table class="table table-bordered py-2">');
 		$table.append('<tr><th>'+name+'</th></tr>');
-		$table.append('<tr><td id="Ipstackmap"></td></tr>');
-		$table.append('<tr><td id="Ipstackdata"></td></tr>');
+		var ip_dashed = data.ip.replaceAll(".", "_")
+		ip_dashed = "Ipstackmap"+ip_dashed
+		$table.append('<tr><td id="'+ip_dashed+'"></td></tr>');
+		var str = JSON.stringify(data, undefined, 4)
+		$table.append('<tr><td><pre>'+syntaxHighlight(str)+'</pre></td></tr>');
 
 		$("#"+tagid).append($table)
-		var str = JSON.stringify(data, undefined, 4)
-		output('Ipstackdata', syntaxHighlight(str));
-		pointOnmap("Ipstackmap", data.latitude, data.longitude, data.city)
+		pointOnmap(ip_dashed, data.latitude, data.longitude, data.city)
 	} 
 	
 	else if (name === "Ipinfo") {
 		$table = $('<table class="table table-bordered py-2">');
 		$table.append('<tr><th>'+name+'</th></tr>');
-		$table.append('<tr><td id="Ipinfomap"></td></tr>');
-		$table.append('<tr><td id="Ipinfodata"></td></tr>');
+		var ip_dashed = data.ip.replaceAll(".", "_")
+		ip_dashed = "Ipinfomap"+ip_dashed
+		$table = $('<table class="table table-bordered py-2">');
+		$table.append('<tr><th>'+name+'</th></tr>');
+		$table.append('<tr><td id="'+ip_dashed+'"></td></tr>');
+		var str = JSON.stringify(data, undefined, 4)
+		$table.append('<tr><td><pre>'+syntaxHighlight(str)+'</pre></td></tr>');
 		
 		$("#"+tagid).append($table)
-		var str = JSON.stringify(data, undefined, 4)
-		output('Ipinfodata', syntaxHighlight(str));
 		var location = data.loc.split(",")
-		pointOnmap("Ipinfomap", parseFloat(location[0]), parseFloat(location[1]), data.city)
+		pointOnmap(ip_dashed, parseFloat(location[0]), parseFloat(location[1]), data.city)
 	} 
 	
 	else if (name === "Hackertarget") {
 		$table = $('<table class="table table-bordered py-2">');
 		$table.append('<tr><th>'+name+'</th></tr>');
-		$table.append('<tr><td id="Hackertargetmap"></td></tr>');
-		$table.append('<tr><td id="Hackertargetdata"></td></tr>');
-		$("#"+tagid).append($table)
+		var ip_dashed = data["IP Address"].replaceAll(".", "_")
+		ip_dashed = "Hackertarget"+ip_dashed
+		$table.append('<tr><td id="'+ip_dashed+'"></td></tr>');
 		var str = JSON.stringify(data, undefined, 4)
-		output('Hackertargetdata', syntaxHighlight(str));
-		pointOnmap("Hackertargetmap", parseFloat(data.Latitude), parseFloat(data.Longitude), data.City)
+		$table.append('<tr><td><pre>'+syntaxHighlight(str)+'</pre></td></tr>');
+		$("#"+tagid).append($table)
+		pointOnmap(ip_dashed, parseFloat(data.Latitude), parseFloat(data.Longitude), data.City)
 	} 
 	console.log(data)
 }
@@ -206,20 +222,27 @@ function reverseip(data, tagid, name) {
 	if (name === "yougetsignal") {
 		$table = $('<table class="table table-bordered py-2">');
 		$table.append('<tr><th>'+name+'</th></tr>');
-		$table.append('<tr><td id="yougetsignaldata_reverseip"></td></tr>');
-
+		$tr = $('<tr>')
+		$td = $('<td>')
+		$.each(data, function (key, item) {
+			$td.append(item+'<br />');
+		});
+		$tr.append($td)
+		$table.append($tr)
 		$("#"+tagid).append($table)
-		var str = JSON.stringify(data, undefined, 4)
-		output('yougetsignaldata_reverseip', syntaxHighlight(str));
 	}
 	
 	else if (name === "Hackertarget") {
 		$table = $('<table class="table table-bordered py-2">');
 		$table.append('<tr><th>'+name+'</th></tr>');
-		$table.append('<tr><td id="Hackertargetdata_reverseip"></td></tr>');
+		$tr = $('<tr>')
+		$td = $('<td>')
+		$.each(data, function (key, item) {
+			$td.append(item+'<br />');
+		});
+		$tr.append($td)
+		$table.append($tr)
 		$("#"+tagid).append($table)
-		var str = JSON.stringify(data, undefined, 4)
-		output('Hackertargetdata_reverseip', syntaxHighlight(str));
 	} 
 	console.log(data)
 }
@@ -228,19 +251,25 @@ function subdomain(data, tagid, name) {
 	$table = $('<table class="table table-bordered py-2">');
 	if (name === "dnsdumpster") {
 		$table.append('<tr><th>Output with DNS dumpster</th></tr>');
-		$table.append('<tr><td id="subdomain_dnsdumpster_data"></td></tr>');
-		$("#"+tagid).append($table)
+		$tr = $('<tr>')
+		$td = $('<td>')
 		$.each(data, function (key, item) {
-			$("#subdomain_dnsdumpster_data").append(item+'<br />');
+			$td.append(item+'<br />');
 		});
+		$tr.append($td)
+		$table.append($tr)
+		$("#"+tagid).append($table)
 	}
 	if (name === "google_dork") {
 		$table.append('<tr><th>Output with Google Dork</th></tr>');
-		$table.append('<tr><td id="subdomain_google_data"></td></tr>');
-		$("#"+tagid).append($table)
+		$tr = $('<tr>')
+		$td = $('<td>')
 		$.each(data, function (key, item) {
-			$("#subdomain_google_data").append(item+'<br />');
+			$td.append(item+'<br />');
 		});
+		$tr.append($td)
+		$table.append($tr)
+		$("#"+tagid).append($table)
 	}
 	console.log(data)
 }
@@ -261,7 +290,7 @@ function whois(data, tagid, name) {
 	if (name === "whois") {
 		$table = $('<table class="table table-bordered py-2" style="table-layout: fixed">');
 		$table.append('<tr><th>'+name+'</th></tr>');
-		$table.append('<tr><td id="whoisdata" style="white-space:pre-wrap;">'+data+'</td></tr>');
+		$table.append('<tr><td style="white-space:pre-wrap;">'+data+'</td></tr>');
 
 		$("#"+tagid).append($table)
 	}
@@ -269,11 +298,156 @@ function whois(data, tagid, name) {
 	else if (name === "ipwhois") {
 		$table = $('<table class="table table-bordered py-2" style="table-layout: fixed">');
 		$table.append('<tr><th>'+name+'</th></tr>');
-		$table.append('<tr><td id="ipwhoisdata"></td></tr>');
-		$("#"+tagid).append($table)
 		var str = JSON.stringify(data, undefined, 4)
-		output('ipwhoisdata', syntaxHighlight(str));
+		$table.append('<tr><td><pre>'+syntaxHighlight(str)+'</pre></td></tr>');
+		$("#"+tagid).append($table)
 	}
+	console.log(data)
+}
+
+function traceroute_map(locations, points, div) {
+	var chart = am4core.create(div, am4maps.MapChart);
+
+	// Set map definition
+	chart.geodata = am4geodata_worldLow;
+
+	// Set projection
+	chart.projection = new am4maps.projections.Miller();
+
+	// Create map polygon series
+	var polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
+
+	// Make map load polygon (like country names) data from GeoJSON
+	polygonSeries.useGeodata = true;
+
+	// Configure series
+	var polygonTemplate = polygonSeries.mapPolygons.template;
+	polygonTemplate.tooltipText = "{name}";
+	polygonTemplate.fill = am4core.color("#74B266");
+
+	// Create hover state and set alternative fill color
+	var hs = polygonTemplate.states.create("hover");
+	hs.properties.fill = am4core.color("#975aff");
+
+	// Remove Antarctica
+	polygonSeries.exclude = ["AQ"];
+
+	// Add line series
+	var lineSeries = chart.series.push(new am4maps.MapLineSeries());
+	lineSeries.mapLines.template.nonScalingStroke = true;
+	lineSeries.data = [{
+	"multiGeoLine": [
+		locations
+	]
+	}];
+
+	// Create image series
+	var imageSeries = chart.series.push(new am4maps.MapImageSeries());
+
+	// Create a circle image in image series template so it gets replicated to all new images
+	var imageSeriesTemplate = imageSeries.mapImages.template;
+	var circle = imageSeriesTemplate.createChild(am4core.Circle);
+	circle.radius = 4;
+	circle.fill = am4core.color("#975aff");
+	circle.stroke = am4core.color("#FFFFFF");
+	circle.strokeWidth = 2;
+	circle.nonScaling = true;
+	circle.tooltipText = "{title}";
+
+	// Set property fields
+	imageSeriesTemplate.propertyFields.latitude = "latitude";
+	imageSeriesTemplate.propertyFields.longitude = "longitude";
+
+	// Add data for the three cities
+	imageSeries.data = points;
+}
+
+function traceroute(data, tagid) {
+	// $table = $('<table class="table table-bordered py-2">');
+	// $table.append('<tr><th>Traceroute</th></tr>');
+	// $table.append('<tr><td id="traceroutemap"></td></tr>');
+	// $table.append('<tr><td id="traceroutedata"></td></tr>');
+
+	// $("#"+tagid).append($table)
+	// var str = JSON.stringify(data, undefined, 4)
+	// output('traceroutedata', syntaxHighlight(str));
+	// var locations = [];
+	// var points = [];
+	// $.each(data, function (key, item) {
+	// 	locations.push({"latitude":item.latitude, "longitude":item.longitude})
+	// 	points.push({"latitude":item.latitude, "longitude":item.longitude, "title": item.ip})
+	// });
+	// traceroute_map(locations, points, "traceroutemap")
+
+
+	$table = $('<table class="table table-bordered py-2">');
+	$table.append('<tr><th>Traceroute</th></tr>');
+	var locations = [];
+	var points = [];
+	$.each(data, function (key, item) {
+		locations.push({"latitude":item.latitude, "longitude":item.longitude})
+		points.push({"latitude":item.latitude, "longitude":item.longitude, "title": item.ip})
+	});
+	$tr = $('<tr>')
+	$td = document.createElement('td');
+	traceroute_map(locations, points, $td)
+	$tr.append($td)
+	$table.append($tr)
+	var str = JSON.stringify(data, undefined, 4)
+	$table.append('<tr><td><pre>'+syntaxHighlight(str)+'</pre></td></tr>');
+	$("#"+tagid).append($table)
+	console.log(data)
+}
+
+function buildwith(data, tagid) {
+	$table = $('<table class="table table-bordered py-2">');
+	$table.append('<tr><th>For</th><th>BuildWith</th></tr>');
+	$.each(data, function (key, item) {
+		$table.append('<tr><td>'+key+'</td><td>'+item.join(", ")+'</td></tr>');
+	});
+	$("#"+tagid).append($table);
+	console.log(data)
+}
+
+function robot(data, tagid, name) {
+	if (name === "robot") {
+		$table = $('<table class="table table-bordered py-2">');
+		$table.append('<tr><th>robots.txt</th></tr>');
+		$table.append('<tr><th>Disallowed</th></tr>');
+		$.each(data.Disallowed, function (key, item) {
+			$table.append('<tr><td>'+item+'</td></tr>');
+		});
+		$table.append('<tr><th>Allowed</th></tr>');
+		$.each(data.Allowed, function (key, item) {
+			$table.append('<tr><td>'+item+'</td></tr>');
+		});
+		$("#"+tagid).append($table);
+		console.log("robot")
+	}
+	if (name === "sitemap") {
+		$table = $('<table class="table table-bordered py-2">');
+		$table.append('<tr><th>sitemap.xml</th></tr>');
+		json = data.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+		$table.append('<tr><td><pre style="white-space:pre-wrap;">'+json+'</pre></td></tr>');
+		$("#"+tagid).append($table);
+		console.log("sitemap")
+	}
+	console.log(data)
+}
+
+function sslinfo(data, tagid) {
+	$table = $('<table class="table table-bordered py-2">');
+	$table.append('<tr><th></th><th>Data</th></tr>');
+	$.each(data, function (key, item) {
+		if (key === "certRaw") {
+			var str = JSON.stringify(data, undefined, 4);
+			$table.append('<tr><td>'+key+'</td><td><pre>'+syntaxHighlight(str)+'</pre></td></tr>');
+		} else {
+			$table.append('<tr><td>'+key+'</td><td>'+item+'</td></tr>');
+		}
+		
+	});
+	$("#"+tagid).append($table);
 	console.log(data)
 }
 
