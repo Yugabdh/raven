@@ -5,6 +5,26 @@
         <div class="col-12 mb-4">
             <h5 class="text-white">{{ instance.name }}</h5>
         </div>
+        <div class="col-12 mb-4">
+            <div class="container-fluid">
+                <div class="card instance">
+                    <div class="card-body">
+                        <div class="card-header">
+                            <h5>{{ session["instance_name"] }}</h5>
+                            <p class="text-small">{{ session["instance_date"].strftime("%m/%d/%Y, %H:%M:%S") }}</p>
+                        </div>
+                        <p class="card-text">
+                            {{ instance.notes }}
+                        </p>
+                        {% if session["https"] %}
+                            <a class="primary" href="https://{{ session["domain"] }}" target="_blank">{{ session["domain"] }}</a>
+                        {% else %}
+                            <a class="primary" href="http://{{ session["domain"] }}" target="_blank">{{ session["domain"] }}</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
         {% if footprint_results %}
             <div class="col-12 mb-4">
                 <div class="card-columns">
@@ -19,6 +39,7 @@
                             <script type="text/javascript">
                             var result = String("{{footprint.result}}");
                             result = result.replace(/(\r\n|\n|\r)/gm,"").replace(/&#34;/g, '"');
+                            console.log(result);
                             var json = JSON.parse(result);
                             var params = String("{"+"{{ footprint.params_value }}"+"}");
                             params = params.replace(/(\r\n|\n|\r)/gm,"").replace(/&#39;/g, '"');
@@ -39,8 +60,12 @@
             </div>
         {% else %}
             <div class="col-12 mb-4">
-            <p><h6>It's empty here :(</h6></p>
-            <p>Why don't you start With <a href="{{ url_for('footprinting') }}">Footprinting</a>?</p>
+                <div class="container-fluid">
+                    <div class="py-3 pl-3" style="border-left: 3px solid #975aff;background-color: #1e1e1e;">
+                    <p><h6>It's empty here :(</h6></p>
+                    <p>Why don't you start With <a href="{{ url_for('footprinting') }}">Footprinting</a>?</p>
+                    </div>
+                </div>
             </div>
         {% endif %}
     </div>

@@ -33,7 +33,7 @@ class Footprint(db.Model):
     params_value = db.Column(db.String(100), nullable=False)
     overflow = db.Column(db.Boolean, unique=False, default=True)
     scan_time = db.Column(db.DateTime, nullable=False, default=datetime.now)
-    result = db.Column(db.Text, nullable=False)
+    result = db.Column(db.JSON, nullable=False)
     instance_id = db.Column(db.Integer, db.ForeignKey('instance.id'), nullable=False)
 
 

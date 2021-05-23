@@ -1,123 +1,48 @@
-{% extends "layout.html" %}
+{% extends "scan.html" %}
 {% set active_page = "Footprinting > Active" %}
-{% block content %}
-    <div class="row justify-content-center">
-
-        <div class="col-12">
-            <div class="container">
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert alert-info alert-dismissible" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-                            {{message}}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-            </div>
+{% block formcontent %}
+<form method="POST" class="custom-form" id="inputform">
+    <div class="row py-3">
+        <div class="col-lg-10">
+            <input id="domain" name="domain" placeholder="Domain Name" required="" type="text" value="{{ session["domain"] }}">
         </div>
-
-        <div class="col-12 mb-4">
-            <div class="container">
-                <div class="card settings">
-                    <div class="card-header">
-                        <h5>Module > {{ details['name'] }}</h5>
-                    </div>
-                    <div class="card-text">
-                        <div class="container">
-                            <form method="POST" class="custom-form" id="inputform">
-                                <div class="row py-3">
-                                    <div class="col-lg-10">
-                                        <input id="domain" name="domain" placeholder="Domain Name" required="" type="text" value="{{ session["domain"] }}">
-                                    </div>
-                                    <div class="col-lg-2 align-middle pt-0 mt-0">
-                                        <label class="checkbox-container">
-                                            <input class="custom-control-input" id="https" name="https" type="checkbox" value="y">
-                                            HTTPS
-                                            <span class="checkmark"></span>
-                                        </label>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <input class="btn primary-btn btn-custom" id="robot" name="robot" type="submit" value="robot.txt">
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <input class="btn primary-btn btn-custom" id="sitemap" name="sitemap" type="submit" value="sitemap.xml">
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-
-                    <script type=text/javascript>
-                        $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
-                        $("#robot").click(function(event) {
-                            event.preventDefault();
-                            $.getJSON($SCRIPT_ROOT + '/_robot/robot', {
-                                domainName: $("#domain").val(),
-                                https: $('#https').is(':checked'),
-                            }, function(data) {
-                                robot(data, "output", "robot")
-                            });
-                            return false;
-                        });
-                        $("#sitemap").click(function(event) {
-                            event.preventDefault();
-                            $.getJSON($SCRIPT_ROOT + '/_robot/sitemap', {
-                                domainName: $("#domain").val(),
-                                https: $('#https').is(':checked'),
-                            }, function(data) {
-                                robot(data, "output", "sitemap")
-                            });
-                            return false;
-                        });
-                    </script>
-                  </div>
-
-            </div>
+        <div class="col-lg-2 align-middle pt-0 mt-0">
+            <label class="checkbox-container">
+                <input class="custom-control-input" id="https" name="https" type="checkbox" value="y">
+                HTTPS
+                <span class="checkmark"></span>
+            </label>
         </div>
-        <div class="col-12 mb-4">
-            <div class="container">
-                <div class="card settings">
-                    <div class="card-header">
-                        <h5>Output</h5>
-                    </div>
-                    <div class="card-text">
-                        <div class="container pt-3">
-                            <div id="output" class="scrollable-output">
-                            <div class="text-center py-3"><img id="loading-image" src="{{ url_for('static', filename='assets/img/ajax-loader.gif')}}" style="display:none;"/></div>
-                            </div>
-                        </div>
-                    </div>
-                  </div>
-
-            </div>
+        <div class="col-lg-6">
+            <input class="btn primary-btn btn-custom" id="robot" name="robot" type="submit" value="robot.txt">
         </div>
-        <div class="col-12 mb-4">
-            <div class="container">
-                <div class="card settings">
-                    <div class="card-header">
-                        <h5>Help</h5>
-                    </div>
-                    <div class="card-text">
-                        <div class="container pt-3">
-                            <h6 class="mb-3">Description</h6>
-                            <p>{{ details['discription'] }}</p>
-                            <h6 class="mb-3">Output</h6>
-                            <p>{{ details['output'] }}</p>
-                            <h6 class="mb-3">Parameters</h6>
-                            <p>
-                            {% for param in details['param'] %}
-                                <span class="badge badge-pill badge-light">
-                                    {{param}}
-                                </span>
-                            {% endfor %}
-                            </p>
-                        </div>
-                    </div>
-                  </div>
-
-            </div>
+        <div class="col-lg-6">
+            <input class="btn primary-btn btn-custom" id="sitemap" name="sitemap" type="submit" value="sitemap.xml">
         </div>
     </div>
-{% endblock content %}
+</form>
+<script type=text/javascript>
+    $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    $("#robot").click(function(event) {
+        event.preventDefault();
+        $("#output_wrapper").show();
+        $.getJSON($SCRIPT_ROOT + '/_robot/robot', {
+            domainName: $("#domain").val(),
+            https: $('#https').is(':checked'),
+        }, function(data) {
+            robot(data, "output", "robot")
+        });
+        return false;
+    });
+    $("#sitemap").click(function(event) {
+        event.preventDefault();
+        $.getJSON($SCRIPT_ROOT + '/_robot/sitemap', {
+            domainName: $("#domain").val(),
+            https: $('#https').is(':checked'),
+        }, function(data) {
+            robot(data, "output", "sitemap")
+        });
+        return false;
+    });
+</script>
+{% endblock formcontent %}

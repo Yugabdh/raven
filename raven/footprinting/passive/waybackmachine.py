@@ -52,7 +52,7 @@ class WayBackMachine(object):
             'output': 'json',
             'matchType': 'prefix',
             'collapse': 'urlkey',
-            'fl': 'original,mimetype,timestamp,'
+            'fl': 'original,timestamp,'
                   'endtimestamp,groupcount,uniqcount',
             'ilter': '!statuscode:[45]..',
             'limit': 100000,
@@ -72,5 +72,5 @@ class WayBackMachine(object):
                 print("[!] No results found")
         else:
             json_data = json.loads("")
-
+        print(json_data)
         return json_data

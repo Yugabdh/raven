@@ -1,50 +1,6 @@
-{% extends "scan.html" %}
-{% set active_page = "Footprinting > Active" %}
-{% block formcontent %}
-<form method="POST" class="custom-form" id="inputform">
-    <div class="row py-3">
-        <div class="col-lg-8">
-            <input id="ip" name="ip" placeholder="ip Address" required="" type="text" value="{{ session["ip"] }}">
-        </div>
-        <div class="col-lg-2 align-middle pt-0 mt-0">
-            <label class="checkbox-container">
-                <input class="custom-control-input" id="https" name="https" type="checkbox" value="y">
-                HTTPS
-                <span class="checkmark"></span>
-            </label>
-        </div>
-        <div class="col-lg-2 align-middle pt-0 mt-0">
-            <select name="source" id="source">
-                <option value="LO">Local</option>
-                <option value="AU">AU</option>
-                <option value="CH">CH</option>
-                <option value="RU">RU</option>
-                <option value="UK">UK</option>
-                <option value="US">US</option>
-            </select>
-        </div>
-        <div class="col-lg-12">
-            <input class="btn primary-btn btn-custom" id="submit" name="submit" type="submit" value="Trace">
-        </div>
-    </div>
-</form>
-<script type=text/javascript>
-    $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
-    $("#inputform").submit(function(event) {
-        event.preventDefault();
-        $("#output_wrapper").show();
-        $.getJSON($SCRIPT_ROOT + '/_traceroute', {
-            ip: $("#ip").val(),
-            source: $('#source').find(":selected").val(),
-            http: $('#https').is(':checked'),
-        }, function(data) {
-            traceroute(data, "output")
-        });
-        return false;
-    });
-</script>
+{% extends "layout.html" %}
+{% block content %}
     <div class="row justify-content-center">
-
         <div class="col-12">
             <div class="container">
             {% with messages = get_flashed_messages() %}
@@ -68,16 +24,13 @@
                     </div>
                     <div class="card-text">
                         <div class="container">
-                            
+                            {% block formcontent %} {% endblock %}
                         </div>
-                    </div>
-
-
-                  </div>
-
+                    </div>                   
+                </div>
             </div>
         </div>
-        <div class="col-12 mb-4">
+        <div class="col-12 mb-4" id="output_wrapper" style="display:none;">
             <div class="container">
                 <div class="card settings">
                     <div class="card-header">
@@ -86,12 +39,13 @@
                     <div class="card-text">
                         <div class="container pt-3">
                             <div id="output">
-                            <div class="text-center py-3"><img id="loading-image" src="{{ url_for('static', filename='assets/img/ajax-loader.gif')}}" style="display:none;"/></div>
+                                <div class="text-center py-3">
+                                <img id="loading-image" src="{{ url_for('static', filename='assets/img/ajax-loader.gif')}}" style="display:none;"/>
+                                </div>
                             </div>
                         </div>
                     </div>
                   </div>
-
             </div>
         </div>
         <div class="col-12 mb-4">
@@ -103,7 +57,7 @@
                     <div class="card-text">
                         <div class="container pt-3">
                             <h6 class="mb-3">Description</h6>
-                            <p>{{ details['discription'] }}</p>
+                            <div id="details_item" class="pb-3"></div>
                             <h6 class="mb-3">Output</h6>
                             <p>{{ details['output'] }}</p>
                             <h6 class="mb-3">Parameters</h6>
@@ -113,6 +67,12 @@
                                     {{param}}
                                 </span>
                             {% endfor %}
+                            <script>
+                                var description = "{{ details['discription'] }}";
+                                description = description.replaceAll('&lt;', "<").replaceAll('&gt;', ">")
+                                
+                                $("#details_item").append(description)
+                            </script>
                             </p>
                         </div>
                     </div>
@@ -121,4 +81,4 @@
             </div>
         </div>
     </div>
-{% endblock formcontent %}
+{% endblock content %}

@@ -50,17 +50,17 @@
                     {% endif %}
 
                     <li class="nav-item">
-                        <a class="nav-link {{ 'active' if title == 'Instances' else '' }}" href="{{ url_for('instances') }}"><i class="fas fa-folder"></i><span>Instances</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
                         <a class="nav-link {{ 'active' if title == 'Footprinting' else '' }}" href="{{ url_for('footprinting') }}"><i class="fas fa-shoe-prints"></i><span>Footprinting</span>
                         </a>
                     </li>
                     
                     <li class="nav-item">
                         <a class="nav-link {{ 'active' if title == 'Enumeration' else '' }}" href="{{ url_for('enumeration') }}"><i class="fas fa-clipboard-list"></i><span>Enumeration</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link {{ 'active' if title == 'Instances' else '' }}" href="{{ url_for('instances') }}"><i class="fas fa-folder"></i><span>Instances</span>
                         </a>
                     </li>
 

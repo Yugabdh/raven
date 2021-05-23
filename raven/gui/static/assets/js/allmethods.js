@@ -7,184 +7,115 @@ function cms(data, tagid) {
 			$table.append('<tr><td> '+item.categories.join(", ")+ '</td><td> <a href="'+ item.url +'">'+item.name+'</a> </td></tr>');
 		});
 
-		$("#"+tagid).append($table)
+		$("#"+tagid).html($table)
 	} else {
-		$("#"+tagid).append('<tr><td colspan="2"> '+data.msg+ '</td></tr>');
+		$("#"+tagid).html('<tr><td colspan="2"> '+data.msg+ '</td></tr>');
 	}
 }
+
 function dnsdumpster(data, tagid) {
 	console.log(data)
 	var as = {}
+	if ("dns_records" in data) {
+		$.each(data.dns_records.dns, function (key, item) {
+			if (as[item.as]) {
+				as[item.as] += 1
+			} else {
+				as[item.as] = 1
+			}
+		});
+		$.each(data.dns_records.host, function (key, item) {
+			if (as[item.as]) {
+				as[item.as] += 1
+			} else {
+				as[item.as] = 1
+			}
+		});
+		$.each(data.dns_records.mx, function (key, item) {
+			if (as[item.as]) {
+				as[item.as] += 1
+			} else {
+				as[item.as] = 1
+			}
+		});
 
-	$.each(data.dns_records.dns, function (key, item) {
-		if (as[item.as]) {
-			as[item.as] += 1
-		} else {
-			as[item.as] = 1
-		}
-	});
-	$.each(data.dns_records.host, function (key, item) {
-		if (as[item.as]) {
-			as[item.as] += 1
-		} else {
-			as[item.as] = 1
-		}
-	});
-	$.each(data.dns_records.mx, function (key, item) {
-		if (as[item.as]) {
-			as[item.as] += 1
-		} else {
-			as[item.as] = 1
-		}
-	});
-
-	
-
-	var values = $.map(as, function(value, key) { return value.toFixed(0) });
-	var keys = $.map(as, function(value, key) { return key });
-	var ctx = document.createElement('canvas');
-	var config = {
-		type: 'bar',
-		data: {
-			labels: keys,
-			datasets: [{
-				label: 'Hosting (IP block owners)',
-				data: values,
-				borderWidth: 1,
-				backgroundColor: palette('cb-BuGn', keys.length).map(function(hex) {
-					return '#' + hex;
-				})
-			}]
-		},
-		options: {
-			scales: {
-				y: {
-					beginAtZero: true,
-					min: 0,
+		var values = $.map(as, function(value, key) { return value.toFixed(0) });
+		var keys = $.map(as, function(value, key) { return key });
+		var ctx = document.createElement('canvas');
+		var config = {
+			type: 'bar',
+			data: {
+				labels: keys,
+				datasets: [{
+					label: 'Hosting (IP block owners)',
+					data: values,
+					borderWidth: 1,
+					backgroundColor: palette('cb-BuGn', keys.length).map(function(hex) {
+						return '#' + hex;
+					})
+				}]
+			},
+			options: {
+				scales: {
+					y: {
+						beginAtZero: true,
+						min: 0,
+					}
 				}
 			}
+		};
+
+		new Chart(ctx, config);
+		$div = $('<div>')
+		$div.append(ctx);
+		$("#"+tagid).html($div)
+
+		$dns_table = $('<table class="table table-bordered py-2" style="table-layout: fixed">');
+		$host_table = $('<table class="table table-bordered py-2" style="table-layout: fixed">');
+		$mx_table = $('<table class="table table-bordered py-2" style="table-layout: fixed">');
+		$txt_table = $('<table class="table table-bordered py-2" style="table-layout: fixed">');
+
+		if (data.dns_records.dns.length) {
+			$("#"+tagid).append('<h5 class="py-3">DNS record</h5>')
+			$dns_table.append('<tr><th class="text-white">Host Name</th> <th class="text-white">IP</th> <th class="text-white">AS</th></tr>')
+			$.each(data.dns_records.dns, function (key, item) {
+				$dns_table.append('<tr><td> '+item.domain+ '<br />'+item.header+'</td><td>'+item.ip+'<br />'+item.reverse_dns+'</td><td>'+item.as+'</td></tr>');
+			});
+			$("#"+tagid).append($dns_table)
 		}
-	};
-	new Chart(ctx, config);
-	$div = $('<div>')
-	$div.append(ctx);
-	$("#"+tagid).append($div)
 
-	$dns_table = $('<table class="table table-bordered py-2" style="table-layout: fixed">');
-	$host_table = $('<table class="table table-bordered py-2" style="table-layout: fixed">');
-	$mx_table = $('<table class="table table-bordered py-2" style="table-layout: fixed">');
-	$txt_table = $('<table class="table table-bordered py-2" style="table-layout: fixed">');
+		if (data.dns_records.host.length) {
+			$("#"+tagid).append('<h5 class="py-3">Host Table(A record)</h5>')
+			$host_table.append('<tr><th class="text-white">Host</th> <th class="text-white">IP</th> <th class="text-white">AS</th></tr>')
+			$.each(data.dns_records.host, function (key, item) {
+				$host_table.append('<tr><td> '+item.domain+ '<br />'+item.header+'</td><td>'+item.ip+'<br />'+item.reverse_dns+'</td><td>'+item.as+'</td></tr>');
+			});
+			$("#"+tagid).append($host_table)
+		}
+		
+		if (data.dns_records.mx.length) {
+			$("#"+tagid).append('<h5 class="py-3">MX record</h5>')
+			$mx_table.append('<tr><th class="text-white">Host</th> <th class="text-white">IP</th> <th class="text-white">AS</th></tr>')
+			$.each(data.dns_records.mx, function (key, item) {
+				$mx_table.append('<tr><td> '+item.domain+ '<br />'+item.header+'</td><td>'+item.ip+'<br />'+item.reverse_dns+'</td><td>'+item.as+'</td></tr>');
+			});
+			$("#"+tagid).append($mx_table);
+		}
+		
+		if (data.dns_records.txt.length) {
+			$("#"+tagid).append('<h5 class="py-3">TXT record Sender Policy Framework (SPF) configurations</h5>')
+			$.each(data.dns_records.txt, function (key, item) {
+				$txt_table.append('<tr><td> '+item+'</td></tr>');
+			});
+			$("#"+tagid).append($txt_table);
+		}		
 
-	$("#"+tagid).append('<h5 class="py-3">DNS record</h5>')
-	$dns_table.append('<tr><th class="text-white">Host Name</th> <th class="text-white">IP</th> <th class="text-white">AS</th></tr>')
-	$.each(data.dns_records.dns, function (key, item) {
-		$dns_table.append('<tr><td> '+item.domain+ '<br />'+item.header+'</td><td>'+item.ip+'<br />'+item.reverse_dns+'</td><td>'+item.as+'</td></tr>');
-	});
-	$("#"+tagid).append($dns_table)
-
-	$("#"+tagid).append('<h5 class="py-3">Host Table(A record)</h5>')
-	$host_table = $('<table class="table table-bordered py-2">');
-	$host_table.append('<tr><th class="text-white">Host</th> <th class="text-white">IP</th> <th class="text-white">AS</th></tr>')
-	$.each(data.dns_records.host, function (key, item) {
-		$host_table.append('<tr><td> '+item.domain+ '<br />'+item.header+'</td><td>'+item.ip+'<br />'+item.reverse_dns+'</td><td>'+item.as+'</td></tr>');
-	});
-	$("#"+tagid).append($host_table)
-
-	$("#"+tagid).append('<h5 class="py-3">MX record</h5>')
-	$mx_table = $('<table class="table table-bordered py-2">');
-	$mx_table.append('<tr><th class="text-white">Host</th> <th class="text-white">IP</th> <th class="text-white">AS</th></tr>')
-	$.each(data.dns_records.mx, function (key, item) {
-		$mx_table.append('<tr><td> '+item.domain+ '<br />'+item.header+'</td><td>'+item.ip+'<br />'+item.reverse_dns+'</td><td>'+item.as+'</td></tr>');
-	});
-	$("#"+tagid).append($mx_table);
-
-	$("#"+tagid).append('<h5 class="py-3">TXT record Sender Policy Framework (SPF) configurations</h5>')
-	$txt_table = $('<table class="table table-bordered py-2">');
-	$.each(data.dns_records.txt, function (key, item) {
-		$txt_table.append('<tr><td> '+item+'</td></tr>');
-	});
-	$("#"+tagid).append($txt_table);
-
-	$("#"+tagid).append('<h5 class="py-3">The map</h5>')
-	$("#"+tagid).append('<a href="'+data.image_url+'" target="_blank"> Click here <3</a>')
-	
+		$("#"+tagid).append('<h5 class="py-3">The map</h5>')
+		$("#"+tagid).append('<a href="'+data.image_url+'" target="_blank"> Click here <3</a>')
+	} else {
+		$("#"+tagid).html('<p class="py-3">Error no records found on dnsdumpster.com</h5>')
+	}
 }
-// function dnsdumpster(data, tagid) {
-// 	console.log(data)
-// 	$("#"+tagid).append('<div> <canvas id="dnsdumster'+tagid+'"></canvas> </div>')
-
-// 	var ctx = document.getElementById('dnsdumster'+tagid);
-// 	var as = {}
-// 	$("#"+tagid).append('<h5 class="py-3">DNS record</h5>')
-// 	$("#"+tagid).append('<table class="table table-bordered"><tr><th class="text-white">Host Name</th> <th class="text-white">IP</th> <th class="text-white">AS</th></tr></table>')
-// 	$.each(data.dns_records.dns, function (key, item) {
-// 		if (as[item.as]) {
-// 			as[item.as] += 1
-// 		} else {
-// 			as[item.as] = 1
-// 		}
-// 		$("#"+tagid+" table").append('<tr><td> '+item.domain+ '<br />'+item.header+'</td><td>'+item.ip+'<br />'+item.reverse_dns+'</td><td>'+item.as+'</td></tr>');
-// 	});
-
-// 	$("#"+tagid).append('<h5 class="py-3">Host Table(A record)</h5>')
-// 	$host_table = $('<table class="table table-bordered py-2">');
-// 	$host_table.append('<tr><th class="text-white">Host</th> <th class="text-white">IP</th> <th class="text-white">AS</th></tr>')
-// 	$.each(data.dns_records.host, function (key, item) {
-// 		if (as[item.as]) {
-// 			as[item.as] += 1
-// 		} else {
-// 			as[item.as] = 1
-// 		}
-// 		$host_table.append('<tr><td> '+item.domain+ '<br />'+item.header+'</td><td>'+item.ip+'<br />'+item.reverse_dns+'</td><td>'+item.as+'</td></tr>');
-// 	});
-// 	$("#"+tagid).append($host_table);
-
-// 	$("#"+tagid).append('<h5 class="py-3">MX record</h5>')
-// 	$mx_table = $('<table class="table table-bordered py-2">');
-// 	$mx_table.append('<tr><th class="text-white">Host</th> <th class="text-white">IP</th> <th class="text-white">AS</th></tr>')
-// 	$.each(data.dns_records.mx, function (key, item) {
-// 		if (as[item.as]) {
-// 			as[item.as] += 1
-// 		} else {
-// 			as[item.as] = 1
-// 		}
-// 		$mx_table.append('<tr><td> '+item.domain+ '<br />'+item.header+'</td><td>'+item.ip+'<br />'+item.reverse_dns+'</td><td>'+item.as+'</td></tr>');
-// 	});
-// 	$("#"+tagid).append($mx_table);
-
-// 	$("#"+tagid).append('<h5 class="py-3">TXT record Sender Policy Framework (SPF) configurations</h5>')
-// 	$txt_table = $('<table class="table table-bordered py-2">');
-// 	$.each(data.dns_records.txt, function (key, item) {
-// 		$mx_table.append('<tr><td> '+item+'</td></tr>');
-// 	});
-// 	$("#"+tagid).append($txt_table);
-// 	$("#"+tagid).append('<h5 class="py-3">The map</h5>')
-// 	$("#"+tagid).append('<a href="'+data.image_url+'" target="_blank"> Click here <3</a>')
-// 	var values = $.map(as, function(value, key) { return value.toFixed(0) });
-// 	var keys = $.map(as, function(value, key) { return key });
-// 	var myChart = new Chart(ctx, {
-// 		type: 'bar',
-// 		data: {
-// 			labels: keys,
-// 			datasets: [{
-// 				label: 'Hosting (IP block owners)',
-// 				data: values,
-// 				borderWidth: 1,
-// 				backgroundColor: palette('cb-BuGn', keys.length).map(function(hex) {
-// 					return '#' + hex;
-// 				})
-// 			}]
-// 		},
-// 		options: {
-// 			scales: {
-// 				y: {
-// 					beginAtZero: true,
-// 					min: 0,
-// 				}
-// 			}
-// 		}
-// 	});
-// }
 
 function pointOnmap(divid, latitude, longitude, city) {
 	var chart = am4core.create(divid, am4maps.MapChart);
@@ -203,7 +134,7 @@ function pointOnmap(divid, latitude, longitude, city) {
 	// Configure series
 	var polygonTemplate = polygonSeries.mapPolygons.template;
 	polygonTemplate.tooltipText = "{name}";
-	polygonTemplate.fill = am4core.color("#fff");
+	polygonTemplate.fill = am4core.color("#74B266");
 
 	// Create hover state and set alternative fill color
 	var hs = polygonTemplate.states.create("hover");
@@ -261,131 +192,105 @@ function syntaxHighlight(json) {
 }
 
 function geoip(data, tagid, name) {
-	if (name === "Ipstack") {
-		$table = $('<table class="table table-bordered py-2">');
-		$table.append('<tr><th>'+name+'</th></tr>');
-		var ip_dashed = data.ip.replaceAll(".", "_")
-		ip_dashed = "Ipstackmap"+ip_dashed
-		$table.append('<tr><td id="'+ip_dashed+'"></td></tr>');
-		var str = JSON.stringify(data, undefined, 4)
-		$table.append('<tr><td><pre>'+syntaxHighlight(str)+'</pre></td></tr>');
-
-		$("#"+tagid).append($table)
-		pointOnmap(ip_dashed, data.latitude, data.longitude, data.city)
-	} 
-	
-	else if (name === "Ipinfo") {
-		$table = $('<table class="table table-bordered py-2">');
-		$table.append('<tr><th>'+name+'</th></tr>');
-		var ip_dashed = data.ip.replaceAll(".", "_")
-		ip_dashed = "Ipinfomap"+ip_dashed
-		$table = $('<table class="table table-bordered py-2">');
-		$table.append('<tr><th>'+name+'</th></tr>');
-		$table.append('<tr><td id="'+ip_dashed+'"></td></tr>');
-		var str = JSON.stringify(data, undefined, 4)
-		$table.append('<tr><td><pre>'+syntaxHighlight(str)+'</pre></td></tr>');
+	if (!$.isEmptyObject(data)){
+		$table = $('<table class="table table-bordered py-2" style="table-layout: fixed">');
+		$table.append('<tr><th class="text-white">'+name+'</th></tr>');
+		$tr = $('<tr>');
+		$td = document.createElement('td');
+		if (name === "Ipstack") {
+			pointOnmap($td, data.latitude, data.longitude, data.city);
+		} 
 		
-		$("#"+tagid).append($table)
-		var location = data.loc.split(",")
-		pointOnmap(ip_dashed, parseFloat(location[0]), parseFloat(location[1]), data.city)
-	} 
-	
-	else if (name === "Hackertarget") {
-		$table = $('<table class="table table-bordered py-2">');
-		$table.append('<tr><th>'+name+'</th></tr>');
-		var ip_dashed = data["IP Address"].replaceAll(".", "_")
-		ip_dashed = "Hackertarget"+ip_dashed
-		$table.append('<tr><td id="'+ip_dashed+'"></td></tr>');
+		else if (name === "Ipinfo") {
+			var location = data.loc.split(",")
+			pointOnmap($td, parseFloat(location[0]), parseFloat(location[1]), data.city);
+		} 
+		
+		else if (name === "Hackertarget") {
+			pointOnmap($td, parseFloat(data.Latitude), parseFloat(data.Longitude), data.City);
+		}
+		$tr.append($td);
+		$table.append($tr)
 		var str = JSON.stringify(data, undefined, 4)
 		$table.append('<tr><td><pre>'+syntaxHighlight(str)+'</pre></td></tr>');
-		$("#"+tagid).append($table)
-		pointOnmap(ip_dashed, parseFloat(data.Latitude), parseFloat(data.Longitude), data.City)
-	} 
-	console.log(data)
+		$("#"+tagid).html($table)
+	} else {
+		$("#"+tagid).html("<p class='pb-3'>Error occured</p>")
+	}
 }
 
 function googledork(data, tagid, dork) {
-	$table = $('<table class="table table-bordered py-2">');
-	$table.append('<tr><th>URLs found for dork: '+dork+'</th></tr>');
-	var result = data.join("<br />");
 	console.log(result)
-	$table.append('<tr><td>'+result+'</td></tr>');
-	$("#"+tagid).append($table)
-	console.log(data)
+	if(dork === undefined) {
+		dork = "''";
+	} 
+	$table = $('<table class="table table-bordered py-2" style="table-layout: fixed">');
+	$table.append('<tr><th class="text-white">URLs found for dork: '+dork+'</th></tr>');
+	if(data.length) {
+		$td = $('<td>')
+		$.each(data, function (key, item) {
+			$td.append('<a href="'+item+'" target="_blank">'+item+'</a><br />');
+		});
+		$table.append($td);
+		$("#"+tagid).append($table)
+		console.log(data)
+	} else {
+		$table.append('<tr><td>None</td></tr>');
+	}
 }
 
 function reverseip(data, tagid, name) {
-	if (name === "yougetsignal") {
-		$table = $('<table class="table table-bordered py-2">');
-		$table.append('<tr><th>'+name+'</th></tr>');
-		$tr = $('<tr>')
-		$td = $('<td>')
-		$.each(data, function (key, item) {
-			$td.append(item+'<br />');
-		});
-		$tr.append($td)
-		$table.append($tr)
-		$("#"+tagid).append($table)
-	}
-	
-	else if (name === "Hackertarget") {
-		$table = $('<table class="table table-bordered py-2">');
-		$table.append('<tr><th>'+name+'</th></tr>');
-		$tr = $('<tr>')
-		$td = $('<td>')
-		$.each(data, function (key, item) {
-			$td.append(item+'<br />');
-		});
-		$tr.append($td)
-		$table.append($tr)
-		$("#"+tagid).append($table)
-	} 
 	console.log(data)
+	$table = $('<table class="table table-bordered py-2">');
+	$table.append('<tr><th class="text-white">'+name+'</th></tr>');
+	if (data.length) {
+		$tr = $('<tr>');
+		$td = $('<td>');
+		$.each(data, function (key, item) {
+			$td.append(item+'<br />');
+		});
+		$tr.append($td);
+		$table.append($tr);
+		$("#"+tagid).append($table);
+	} else {
+		$table.append('<tr><td>No results found!</td></tr>');
+	}
 }
 
 function subdomain(data, tagid, name) {
-	$table = $('<table class="table table-bordered py-2">');
-	if (name === "dnsdumpster") {
-		$table.append('<tr><th>Output with DNS dumpster</th></tr>');
-		$tr = $('<tr>')
-		$td = $('<td>')
-		$.each(data, function (key, item) {
-			$td.append(item+'<br />');
-		});
-		$tr.append($td)
-		$table.append($tr)
-		$("#"+tagid).append($table)
-	}
-	if (name === "google_dork") {
-		$table.append('<tr><th>Output with Google Dork</th></tr>');
-		$tr = $('<tr>')
-		$td = $('<td>')
-		$.each(data, function (key, item) {
-			$td.append(item+'<br />');
-		});
-		$tr.append($td)
-		$table.append($tr)
-		$("#"+tagid).append($table)
-	}
 	console.log(data)
+	$table = $('<table class="table table-bordered py-2">');
+	if (data.length) {
+		$table.append('<tr><th class="text-white">Output with ' + name + '</th></tr>');
+		$tr = $('<tr>')
+		$td = $('<td>')
+		$.each(data, function (key, item) {
+			$td.append(item+'<br />');
+		});
+		$tr.append($td)
+		$table.append($tr)
+	} else {
+		$table.append('<tr><td>No subdomain found!</td></tr>');
+	}
+	$("#"+tagid).append($table)
 }
 
 function wayback(data, tagid) {
+	console.log(data)
 	$table = $('<table class="table table-bordered py-2" style="table-layout: fixed">');
-	$table.append('<tr><th>original</th><th>mimetype</th><th>timestamp</th><th>endtimestamp</th><th>groupcount</th><th>uniqcount</th></tr>');
+	$table.append('<tr><th class="text-white">original</th><th class="text-white">timestamp</th><th class="text-white">endtimestamp</th><th class="text-white">groupcount</th><th class="text-white">uniqcount</th></tr>');
 	$.each(data.slice(1,), function (key, item) {
-		var timestamp = new Date(parseInt(item[2]));
-		var endtimestamp = new Date(parseInt(item[3]));
-		$table.append('<tr><td>'+item[0]+'</td><td>'+item[1]+'</td><td>'+timestamp.toISOString()+'</td><td>'+endtimestamp.toISOString()+'</td><td>'+item[4]+'</td><td>'+item[5]+'</td></tr>');
+		var timestamp = item[1].slice(0, 4)+"-"+item[1].slice(4, 6)+"-"+item[1].slice(6, 8)+"-"+item[1].slice(8, 10)+"-"+item[1].slice(10, 12)+"-"+item[1].slice(12, 14);
+		var endtimestamp = item[2].slice(0, 4)+"-"+item[2].slice(4, 6)+"-"+item[2].slice(6, 8)+"-"+item[2].slice(8, 10)+"-"+item[2].slice(10, 12)+"-"+item[2].slice(12, 14);
+		$table.append('<tr><td>'+item[0]+'</td><td>'+timestamp+'</td><td>'+endtimestamp+'</td><td>'+item[3]+'</td><td>'+item[4]+'</td></tr>');
 	});
 	$("#"+tagid).append($table)
-	console.log(data)
 }
 
 function whois(data, tagid, name) {
 	if (name === "whois") {
 		$table = $('<table class="table table-bordered py-2" style="table-layout: fixed">');
-		$table.append('<tr><th>'+name+'</th></tr>');
+		$table.append('<tr><th class="text-white">'+name+'</th></tr>');
 		$table.append('<tr><td style="white-space:pre-wrap;">'+data+'</td></tr>');
 
 		$("#"+tagid).append($table)
@@ -393,7 +298,7 @@ function whois(data, tagid, name) {
 	
 	else if (name === "ipwhois") {
 		$table = $('<table class="table table-bordered py-2" style="table-layout: fixed">');
-		$table.append('<tr><th>'+name+'</th></tr>');
+		$table.append('<tr><th class="text-white">'+name+'</th></tr>');
 		var str = JSON.stringify(data, undefined, 4)
 		$table.append('<tr><td><pre>'+syntaxHighlight(str)+'</pre></td></tr>');
 		$("#"+tagid).append($table)
@@ -423,7 +328,7 @@ function traceroute_map(locations, points, div) {
 
 	// Create hover state and set alternative fill color
 	var hs = polygonTemplate.states.create("hover");
-	hs.properties.fill = am4core.color("#975aff");
+	hs.properties.fill = am4core.color("#1e1e1e");
 
 	// Remove Antarctica
 	polygonSeries.exclude = ["AQ"];
@@ -676,11 +581,3 @@ function dnsbrute(data, tagid) {
 	});
 	$("#"+tagid).append($table)
 }
-
-$(document).ajaxStart(function() {
-    $("img#loading-image").show();
-});
-
-$(document).ajaxComplete(function() {
-    $("img#loading-image").hide();
-});
