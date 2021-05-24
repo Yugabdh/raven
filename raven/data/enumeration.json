@@ -13,7 +13,7 @@
             "name": "Nmap ping scan",
             "img": "pingscan.svg",
             "discription": "Ping scan script by nmap. Can be used for host mapping. This will give results without port scan.",
-            "description-small": "Discovers subdomains with help of Nmap script.",
+            "description-small": "Checks status of list of hosts.",
             "param": ["Ip address"],
             "output": "Ping scan result for range of IP addresses.",
             "a": "pingscan"
@@ -31,7 +31,7 @@
             "name": "Subnet scan",
             "img": "subnet.svg",
             "discription": "A subnetwork or subnet is a logical subdivision of an IP network. This will give results without port scan.",
-            "description-small": "Scans well known ports.",
+            "description-small": "Checks status of hosts for given CIDR.",
             "param": ["IP address"],
             "output": "Result of subnet scanning",
             "a": "subnet"
