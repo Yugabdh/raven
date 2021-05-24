@@ -5,7 +5,7 @@ Raven is a web application footpriting tool.
 </p>
 
 [![Python Version](https://img.shields.io/badge/python-3.6+-green)](https://www.python.org)
-![Stable Release](https://img.shields.io/badge/version-1.0-blue.svg)
+[![Stable Release](https://img.shields.io/badge/version-1.0-beta.svg)](https://github.com/Yugabdh/raven/releases/tag/v1.0-beta)
 
 
 ## About
