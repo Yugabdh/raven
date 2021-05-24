@@ -66,9 +66,9 @@ function dnsdumpster(data, tagid) {
 		};
 
 		new Chart(ctx, config);
-		$div = $('<div>')
+		$div = $('<div>');
 		$div.append(ctx);
-		$("#"+tagid).html($div)
+		$("#"+tagid).html($div);
 
 		$dns_table = $('<table class="table table-bordered py-2" style="table-layout: fixed">');
 		$host_table = $('<table class="table table-bordered py-2" style="table-layout: fixed">');
@@ -366,7 +366,7 @@ function traceroute_map(locations, points, div) {
 }
 
 function traceroute(data, tagid) {
-	$table = $('<table class="table table-bordered py-2">');
+	$table = $('<table class="table table-bordered py-2" style="table-layout: fixed">');
 	$table.append('<tr><th>Traceroute</th></tr>');
 	var locations = [];
 	var points = [];
@@ -386,7 +386,7 @@ function traceroute(data, tagid) {
 }
 
 function buildwith(data, tagid) {
-	$table = $('<table class="table table-bordered py-2">');
+	$table = $('<table class="table table-bordered py-2" style="table-layout: fixed">');
 	$table.append('<tr><th>For</th><th>BuildWith</th></tr>');
 	$.each(data, function (key, item) {
 		$table.append('<tr><td>'+key+'</td><td>'+item.join(", ")+'</td></tr>');
@@ -397,7 +397,7 @@ function buildwith(data, tagid) {
 
 function robot(data, tagid, name) {
 	if (name === "robot") {
-		$table = $('<table class="table table-bordered py-2">');
+		$table = $('<table class="table table-bordered py-2" style="table-layout: fixed">');
 		$table.append('<tr><th>robots.txt</th></tr>');
 		$table.append('<tr><th>Disallowed</th></tr>');
 		$.each(data.Disallowed, function (key, item) {
@@ -411,7 +411,7 @@ function robot(data, tagid, name) {
 		console.log("robot")
 	}
 	if (name === "sitemap") {
-		$table = $('<table class="table table-bordered py-2">');
+		$table = $('<table class="table table-bordered py-2" style="table-layout: fixed">');
 		$table.append('<tr><th>sitemap.xml</th></tr>');
 		json = data.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 		$table.append('<tr><td><pre style="white-space:pre-wrap;">'+json+'</pre></td></tr>');
@@ -442,7 +442,7 @@ function osmapping(data, tagid) {
 	if (data.error) {
 		$("#"+tagid).append('<div> <p class="text-danger">'+data.msg+'</p> </div>')
 	}
-	$table = $('<table class="table table-bordered py-2">');
+	$table = $('<table class="table table-bordered py-2" style="table-layout: fixed">');
 	$table.append('<tr><th colspan="2">OS Match</th></tr>');
 	$tr = $('<tr>')
 	$td_graph = $('<td colspan="2">')
@@ -558,15 +558,24 @@ function subnet(data, tagid) {
 }
 
 function pingscan(data, tagid) {
-	console.log(data)
 	if (data.error) {
 		$("#"+tagid).append('<div> <p class="text-danger">'+data.msg+'</p> </div>')
+	} else {
+
+		console.log(data)
+		$table = $('<table class="table table-bordered py-2" style="table-layout: fixed">');
+		$table.append('<tr><th class="text-white">IP Address</th><th class="text-white">Host name</th><th class="text-white">Status</th></tr>');
+		$.each(data, function (key, item) {
+			if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(key)) {
+				var hostname = "";
+				if (data[key].hostname) {
+					hostname = data[key].hostname[0].name
+				}
+				$table.append('<tr><td>'+key+'</td><td>'+hostname+'</td><td>'+item.state.state+'</td></tr>');
+			}
+		});
+		$("#"+tagid).append($table)
 	}
-	$table = $('<table class="table table-bordered py-2">');
-	$.each(data, function (key, item) {
-		$table.append('<tr><td>'+item.hostname+'</td><td>'+item.address+'</td></tr>');
-	});
-	$("#"+tagid).append($table)
 }
 
 function dnsbrute(data, tagid) {

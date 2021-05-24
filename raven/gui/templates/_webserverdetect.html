@@ -22,6 +22,7 @@
     $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
     $("#inputform").submit(function(event) {
         event.preventDefault();
+        $("#output_wrapper").show();
         $.getJSON($SCRIPT_ROOT + '/_webserver', {
             domainName: $("#domain").val(),
             https: $('#https').is(':checked'),

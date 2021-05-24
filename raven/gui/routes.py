@@ -200,7 +200,7 @@ def cms():
 @app.route('/_dnsdumpster', methods=['GET', 'POST'])
 def dnsdumpster():
     domain = request.args.get('domainName')
-    dnsdumpster_obj = DNSDumpsterAPI(domain)    
+    dnsdumpster_obj = DNSDumpsterAPI(domain)
     result = dnsdumpster_obj.fetch()
     if result:
         temp_txt = list()
@@ -209,7 +209,7 @@ def dnsdumpster():
                 temp_txt.append(_.replace('"', r'\"'))
             
             result['dns_records']["txt"] = temp_txt
-        if session.get("instance_id"):
+        if session.get("instance_id") and result:
             footprint_save_to_db("Passive", "dnsdumpster", f"'Domain': '{domain}'", False, json.dumps(result), session["instance_id"])
     return jsonify(result)
 
@@ -402,11 +402,10 @@ def webserver():
     https = request.args.get('https')
     webserver_obj = Webserver_detect(https, domain)
     result = webserver_obj.detect()
-    response = make_response(jsonify(result))
-    response.headers["Content-Type"] = "application/json"
+    print(result)
     if session.get("instance_id") and result:
-        footprint_save_to_db("Active", "webserver", f"'Domain': '{domain}'", False, json.dumps(response), session["instance_id"])
-    return response
+        footprint_save_to_db("Active", "webserver", f"'Domain': '{domain}'", False, json.dumps(result), session["instance_id"])
+    return jsonify(result)
 
 
 @app.route('/notification')
@@ -510,7 +509,7 @@ def portscan():
 def pingscan():
     ip = request.args.get('ip')
     nmap_obj = Nmap_auto()
-    result = nmap_obj.dnsbrute(ip)
+    result = nmap_obj.pingscan(ip)
     if not 'error' in result.keys():
         if session.get("instance_id"):
             footprint_save_to_db("Enumeration", "pingscan", f"'IP': '{ip}'", True, json.dumps(result), session["instance_id"])
