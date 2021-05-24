@@ -1,14 +1,12 @@
+
 <p align="center">
-  <img src='raven/assets/img/svg/logo-text.svg' height='500'></img><br>
-  <h1 align="center">Raven</h1>
-  <br>
-</p>
-<p align="center">
-  Raven Is A Web Application Footpriting Tool.
+<img src='raven/assets/img/svg/logo-text.svg' height='500'></img>
+Raven is a web application footpriting tool.
 </p>
 
 [![Python Version](https://img.shields.io/badge/python-3.6+-green)](https://www.python.org)
 ![Stable Release](https://img.shields.io/badge/version-1.0-blue.svg)
+
 
 ## About
 
