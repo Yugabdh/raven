@@ -3,24 +3,36 @@
 {% block content %}
     <div class="row">
         <div class="col-12 mb-4">
-            <h5 class="text-white">{{ instance.name }}</h5>
-        </div>
-        <div class="col-12 mb-4">
             <div class="container-fluid px-0">
                 <div class="card instance">
                     <div class="card-body">
                         <div class="card-header">
-                            <h5>{{ session["instance_name"] }}</h5>
-                            <p class="text-small">{{ session["instance_date"].strftime("%m/%d/%Y, %H:%M:%S") }}</p>
+                            <h5><span class="text-white">Instance Name: </span>{{ instance.name }}</h5>
+                            <p class="text-small">{{ instance.date_created.strftime("%m/%d/%Y, %H:%M:%S") }}</p>
                         </div>
                         <p class="card-text">
-                            {{ instance.notes }}
+                            {% if instance.notes %}
+                                <p>
+                                    <span class="text-white">Note: </span>
+                                    {{ instance.notes }}
+                                </p>
+                            {% endif %}
+                            <p>
+                                {% if session["domain"] %}
+                                    <span class="text-white">Domain Name: </span>
+                                    {% if session["https"] %}
+                                        <a class="primary" href="https://{{ session['domain'] }}" target="_blank">{{ session["domain"] }}</a>
+                                    {% else %}
+                                        <a class="primary" href="http://{{ session['domain'] }}" target="_blank">{{ session["domain"] }}</a>
+                                    {% endif %}
+                                {% endif %}
+                            </p>
+                            <p>
+                                {% if session["ip"] %}
+                                    <span class="text-white">IP address: </span> {{ session["ip"] }}
+                                {% endif %}
+                            </p>
                         </p>
-                        {% if session["https"] %}
-                            <a class="primary" href="https://{{ session["domain"] }}" target="_blank">{{ session["domain"] }}</a>
-                        {% else %}
-                            <a class="primary" href="http://{{ session["domain"] }}" target="_blank">{{ session["domain"] }}</a>
-                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -37,19 +49,19 @@
                         </div>
                         <div class="card-text p-3 {{ 'scrollable-output' if footprint.overflow else '' }}" id="{{ footprint.instance_id }}{{footprint.id}}{{footprint.module_name}}">
                             <script type="text/javascript">
-                            var result = String("{{footprint.result}}");
-                            result = result.replace(/(\r\n|\n|\r)/gm,"").replace(/&#34;/g, '"');
-                            console.log(result);
-                            var json = JSON.parse(result);
-                            var params = String("{"+"{{ footprint.params_value }}"+"}");
-                            params = params.replace(/(\r\n|\n|\r)/gm,"").replace(/&#39;/g, '"');
-                            var params = JSON.parse(params);
-                            console.log(params)
-                            if (params.Method) {
-                                {{footprint.module_name}}(json, "{{ footprint.instance_id }}{{footprint.id}}{{footprint.module_name}}", params.Method)
-                            } else {
-                                {{footprint.module_name}}(json, "{{ footprint.instance_id }}{{footprint.id}}{{footprint.module_name}}")
-                            }
+                                var result = String("{{footprint.result}}");
+                                result = result.replace(/(\r\n|\n|\r)/gm,"").replace(/&#34;/g, '"');
+                                console.log(result);
+                                var json = JSON.parse(result);
+                                var params = String("{"+"{{ footprint.params_value }}"+"}");
+                                params = params.replace(/(\r\n|\n|\r)/gm,"").replace(/&#39;/g, '"');
+                                var params = JSON.parse(params);
+                                console.log(params)
+                                if (params.Method) {
+                                    {{footprint.module_name}}(json, "{{ footprint.instance_id }}{{footprint.id}}{{footprint.module_name}}", params.Method)
+                                } else {
+                                    {{footprint.module_name}}(json, "{{ footprint.instance_id }}{{footprint.id}}{{footprint.module_name}}")
+                                }
                             
                             </script>
                         </div>

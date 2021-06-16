@@ -4,7 +4,7 @@ function cms(data, tagid) {
 		$table = $('<table class="table table-bordered py-2">');
 		$table.append('<tr><th class="text-white">Categories</th> <th class="text-white">Name</th> </tr>');
 		$.each(data.data, function (key, item) {
-			$table.append('<tr><td> '+item.categories.join(", ")+ '</td><td> <a href="'+ item.url +'">'+item.name+'</a> </td></tr>');
+			$table.append('<tr><td> '+item.categories.join(", ")+ '</td><td> <a target="_blank" href="'+ item.url +'">'+item.name+'</a> </td></tr>');
 		});
 
 		$("#"+tagid).html($table)

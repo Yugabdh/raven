@@ -13,9 +13,6 @@
                                         <h5>{{ instance.name }}</h5>
                                         <p class="text-small">{{ instance.date_created.strftime("%m/%d/%Y, %H:%M:%S") }}</p>
                                     </div>
-                                    <p class="card-text">
-                                        {{ instance.notes }}
-                                    </p>
                                     {% if instance.https %}
                                         <a class="primary" href="https://{{ instance.domain }}" target="_blank">{{ instance.domain }}</a>
                                     {% else %}
@@ -32,7 +29,9 @@
                 <div class="container-fluid">
                     <div class="py-3 pl-3" style="border-left: 3px solid #975aff;background-color: #1e1e1e;">
                     <p><h6>It's empty here :(</h6></p>
-                    <p>Why don't you start With <a href="{{ url_for('home') }}">Creating new instances</a>?</p>
+                    <p>Let's start with, <a href="{{ url_for('home') }}">Creating new instances</a>.</p>
+                        <p>If you don't want to create an instance you can use an individual module but results won't
+                            get stored in that case.</p>
                     </div>
                 </div>
             </div>
